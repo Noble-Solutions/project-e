@@ -26,4 +26,4 @@ app.add_middleware(
 
 @app.get("/")
 async def root():
-    return {"message": "Hello nigger"}
+    return {"message": "Hello world"}

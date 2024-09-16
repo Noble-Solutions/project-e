@@ -8,7 +8,10 @@ from config import settings
 
 class DataBaseHelper:
     engine: AsyncEngine = create_async_engine(
-        url=settings.database_url_asyncpg, echo=True
+        url=settings.database_url_asyncpg,
+        echo=settings.echo,
+        pool_size=settings.pool_size,
+        max_overflow=settings.max_overflow,
     )
 
     session_factory = async_sessionmaker(
