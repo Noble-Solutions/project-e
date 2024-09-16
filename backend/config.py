@@ -15,8 +15,8 @@ class Settings(BaseSettings):
     DB_USER: str
     DB_PASS: str
     DB_NAME: str
-    reset_password_token_secret: str
-    verification_token_secret: str
+    # reset_password_token_secret: str
+    # verification_token_secret: str
 
     @property
     def database_url_asyncpg(self):
