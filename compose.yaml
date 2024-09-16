@@ -1,7 +1,7 @@
 services:
   frontend:
     build: ./frontend
-    container_name: instruments_frontend
+    container_name: project_e_frontend
     command: npm run dev --host
     ports:
       - '5173:5173'
@@ -17,7 +17,7 @@ services:
   #fastapi app
   backend:
     build: ./backend
-    container_name: instruments_backend
+    container_name: project_e_backend
     ports:
       - 8000:8000
     volumes:
@@ -29,7 +29,7 @@ services:
       - custom
   db:
     image: postgres
-    container_name: instruments_db
+    container_name: project_e_db
     environment:
       POSTGRES_DB: instruments
       POSTGRES_USER: admin
