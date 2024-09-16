@@ -1,0 +1,44 @@
+services:
+  frontend:
+    build: ./frontend
+    container_name: project_e_frontend
+    command: npm run dev --host
+    ports:
+      - '5173:5173'
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - /dev/null:/app/package-lock.json
+    networks:
+      - custom
+
+  #fastapi app
+  backend:
+    build: ./backend
+    container_name: project_e_backend
+    ports:
+      - 8000:8000
+    volumes:
+      - ./backend:/fastapi_app
+      - /fastapi_app/.venv
+    depends_on:
+      - db
+    networks:
+      - custom
+  db:
+    image: postgres
+    container_name: project_e_db
+    environment:
+      POSTGRES_DB: project_e
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+    ports:
+      - "5432:5432"
+    networks:
+      - custom
+
+networks:
+  custom:
+    driver: bridge
