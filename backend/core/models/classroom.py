@@ -3,6 +3,10 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from .base import Base
 from .mixins.uuid_pk import UUIDIdPkMixin
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from .user_roles import Teacher, Student
 
 
 class Classroom(
@@ -24,4 +28,8 @@ class Classroom(
     teacher: Mapped["Teacher"] = relationship(
         "Teacher",
         back_populates="classrooms",
+    )
+    students: Mapped[list["Student"]] = relationship(
+        back_populates="classrooms",
+        secondary="student_classroom_associations",
     )
