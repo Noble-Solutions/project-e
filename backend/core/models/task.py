@@ -2,7 +2,7 @@ from uuid import UUID
 
 from sqlalchemy import Text, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 from .base import Base
 from .mixins.uuid_pk import UUIDIdPkMixin
@@ -17,7 +17,14 @@ class AnswerType(PyEnum):
     SHORT_ANSWER = "short_answer"
 
 
-class Task(UUIDIdPkMixin, Base):
+if TYPE_CHECKING:
+    from .user_roles import Teacher
+
+
+class Task(
+    UUIDIdPkMixin,
+    Base,
+):
     type: Mapped[int]
     text: Mapped[str] = mapped_column(
         Text,
@@ -31,7 +38,9 @@ class Task(UUIDIdPkMixin, Base):
     """
     # file_id: Mapped[UUID_ID]
     type_of_answer: Mapped[AnswerType]
-    teacher_id: Mapped[UUID_ID] = mapped_column(
+    correct_answer: Mapped[Optional[str]]
+
+    teacher_id: Mapped[int] = mapped_column(
         ForeignKey(
             "teachers.id",
             ondelete="cascade",
@@ -40,6 +49,4 @@ class Task(UUIDIdPkMixin, Base):
     teacher: Mapped["Teacher"] = relationship(
         "Teacher",
         back_populates="tasks",
-        lazy="noload",
     )
-    correct_answer: Mapped[str] = mapped_column(nullable=True)
