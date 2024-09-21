@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -16,7 +16,7 @@ if TYPE_CHECKING:
 
 class Teacher(User):
     id: Mapped[UUID_ID] = mapped_column(ForeignKey("users.id"), primary_key=True)
-    subject: Mapped[str]
+    subject: Mapped[Optional[str]]
     variants: Mapped[list["Variant"]] = relationship(
         back_populates="teacher",
     )
@@ -33,7 +33,13 @@ class Teacher(User):
 
 # Student model inheriting from User
 class Student(User):
-    id: Mapped[UUID_ID] = mapped_column(ForeignKey("users.id"), primary_key=True)
+    id: Mapped[UUID_ID] = mapped_column(
+        ForeignKey(
+            "users.id",
+            ondelete="cascade",
+        ),
+        primary_key=True,
+    )
     variants: Mapped[list["Variant"]] = relationship(
         back_populates="students",
         secondary="student_variant_associations",

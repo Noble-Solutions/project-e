@@ -3,6 +3,7 @@ from contextlib import asynccontextmanager
 
 from starlette.middleware.cors import CORSMiddleware
 from core.db_helper import db_helper
+from api import router as api_router
 
 
 @asynccontextmanager
@@ -12,7 +13,7 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(lifespan=lifespan)
-
+app.include_router(api_router)
 origins = ["http://localhost:5173"]
 
 app.add_middleware(
