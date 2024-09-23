@@ -1,27 +1,32 @@
 from fastapi import Form, HTTPException, Depends
 from fastapi.security import OAuth2PasswordBearer
+from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 from .auth_utils import validate_password, decode_jwt
 from .db_actions import get_user_by_username
 from core.exceptions import unauthed_exc
-from jwt.exceptions import JWTDecodeError
+from jwt import InvalidTokenError
 from backend_types import RoleType
+from ..db_helper import postgres_session
+from ..schemas.user import UserRead
 
 oauth2_scheme = OAuth2PasswordBearer(
     tokenUrl="/api/auth/login",
 )
 
 
-def validate_auth_credentials_of_user(
-    username: str = Form(),
-    password: str = Form(),
+async def validate_auth_credentials_of_user(
+    username: str,
+    password: str,
 ) -> dict:
-    if not (user := get_user_by_username(username)):
+    session: AsyncSession = postgres_session.get()
+    print(f"username= {str(username)}")
+    if not (user := await get_user_by_username(str(username))):
         raise unauthed_exc
-
+    print(UserRead.model_validate(user))
     if not validate_password(
         password=password,
-        hashed_password=user.password,
+        hashed_password=user.hashed_password,
     ):
         raise unauthed_exc
     user_schema_for_creating_access_token = {
@@ -38,7 +43,7 @@ def get_current_token_payload(
         payload = decode_jwt(
             token=token,
         )
-    except JWTDecodeError as e:
+    except InvalidTokenError as e:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail=f"invalid token error: {e}",

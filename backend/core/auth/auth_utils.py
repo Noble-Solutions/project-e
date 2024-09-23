@@ -2,8 +2,8 @@ import uuid
 from datetime import datetime, timedelta
 
 import bcrypt
-import jwt
-
+from jwt.api_jwt import encode
+from jwt.api_jwt import decode
 from config import settings
 
 
@@ -25,7 +25,7 @@ def encode_jwt(
         iat=now,
         jti=str(uuid.uuid4()),
     )
-    encoded = jwt.encode(
+    encoded = encode(
         to_encode,
         private_key,
         algorithm=algorithm,
@@ -38,7 +38,7 @@ def decode_jwt(
     public_key: str = settings.auth_jwt.public_key_path.read_text(),
     algorithm: str = settings.auth_jwt.algorithm,
 ) -> dict:
-    decoded = jwt.decode(
+    decoded = decode(
         token,
         public_key,
         algorithms=[algorithm],

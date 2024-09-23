@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Form
 from starlette import status
 
 from core.auth.auth_utils import hash_password, encode_jwt
@@ -60,15 +60,17 @@ async def register_new_user(
     return StudentRead.model_validate(user)
 
 
-@router.get("/login")
+@router.post("/login")
 async def login(
     db_session: Annotated[
         "AsyncSession",
         Depends(db_helper.session_getter),
     ],
-    user_schema: dict = Depends(validate_auth_credentials_of_user),
+    username: str = Form(...),
+    password: str = Form(...),
 ):
     postgres_session.set(db_session)
+    user_schema = await validate_auth_credentials_of_user(username, password)
     access_token = encode_jwt(
         payload=user_schema,
     )
