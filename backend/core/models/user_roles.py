@@ -16,7 +16,7 @@ if TYPE_CHECKING:
 
 class Teacher(User):
     id: Mapped[UUID_ID] = mapped_column(ForeignKey("users.id"), primary_key=True)
-    subject: Mapped[Optional[str]]
+    subject: Mapped[str]
     variants: Mapped[list["Variant"]] = relationship(
         back_populates="teacher",
     )

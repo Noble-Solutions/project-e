@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { AppState } from '../../app/store'
+import { AppState } from '../store'
 
 /* 
 ФИКС ЕСЛИ НЕ ТИПИЗИРУЮТСЯ АВТОМАТИЧЕСКИ СГЕНЕРИРОВАННЫЕ ХУКИ RTK QUERY
@@ -14,7 +14,16 @@ const API_URL : string = 'http://localhost:8000/api'
 export const baseApi = createApi({
     baseQuery: fetchBaseQuery({ 
         baseUrl: API_URL,
-    }),
+        credentials: 'include',
+        prepareHeaders: (headers, { getState }) => {
+            // By default, if we have a token in the store, let's use that for authenticated requests
+            const token = (getState() as AppState).auth.token
+            if (token) {
+              headers.set('authorization', `Bearer ${token}`)
+            }
+            return headers 
+          }
+        }),    
     tagTypes: [],
     endpoints: () => ({}),
 })

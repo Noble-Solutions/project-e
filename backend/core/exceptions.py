@@ -3,11 +3,23 @@ from starlette import status
 from .constants import invalid_auth_credentials
 
 
-class UserAlreadyExists(Exception):
-    pass
+invalid_data_exc = HTTPException(
+    status_code=status.HTTP_400_BAD_REQUEST,
+    detail="Неправильные данные для регистрации",
+)
 
 
 unauthed_exc = HTTPException(
     status_code=status.HTTP_401_UNAUTHORIZED,
-    detail=invalid_auth_credentials,
+    detail="Неправильные имя пользователя или пароль",
+)
+
+forbidden_exc = HTTPException(
+    status_code=status.HTTP_403_FORBIDDEN,
+    detail="Доступ запрещен",
+)
+
+user_already_exists_exc = HTTPException(
+    status_code=status.HTTP_403_FORBIDDEN,
+    detail="Пользователь с таким именем пользователя уже существует",
 )

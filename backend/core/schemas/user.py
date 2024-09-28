@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from pydantic import BaseModel, Field, ConfigDict
 from backend_types import RoleType
 from typing import Annotated, Optional
@@ -9,6 +11,7 @@ class UserCreate(BaseModel):
     first_name: str
     last_name: str
     role_type: RoleType
+    subject: Optional[str] = Field(None)
 
 
 class UserRead(BaseModel):
@@ -16,6 +19,12 @@ class UserRead(BaseModel):
     username: str
     first_name: str
     last_name: str
+    role_type: RoleType
+
+
+class AccessTokenPayload(BaseModel):
+    id: UUID
+    username: str
     role_type: RoleType
 
 
