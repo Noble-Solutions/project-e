@@ -10,7 +10,11 @@ from core.utils.auth_utils import (
     encode_jwt,
     validate_password,
 )
-from core.exceptions import user_already_exists_exc, unauthed_exc, invalid_data_exc
+from core.exceptions import (
+    user_already_exists_exc,
+    unauthed_exc,
+    invalid_data_for_register_exc,
+)
 from core.models import Teacher, Student, User
 from core.schemas import UserCreateInDB, UserCreate
 from core.schemas.user import TeacherRead, StudentRead, UserRead
@@ -98,11 +102,11 @@ class AuthService(BaseService):
 
         if user.role_type == "teacher":
             if "subject" not in user.model_dump(exclude_unset=True).keys():
-                raise invalid_data_exc
+                raise invalid_data_for_register_exc
 
         if user.role_type == "student":
             if "subject" in user.model_dump(exclude_unset=True).keys():
-                raise invalid_data_exc
+                raise invalid_data_for_register_exc
 
         hashed_password = hash_password(user.password)
 

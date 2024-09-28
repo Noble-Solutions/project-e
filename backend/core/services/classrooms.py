@@ -1,11 +1,15 @@
 from typing import List, Dict
 from uuid import UUID
 
+from fastapi import HTTPException
 from sqlalchemy import select
+from sqlalchemy.orm import selectinload
 
 from core.models import Classroom, Student
 from core.schemas import ClassroomCreate, ClassroomRead
 from .base_service import BaseService
+from ..exceptions import forbidden_exc, student_already_in_classroom_exc
+from ..schemas.user import StudentRead
 
 
 class ClassroomsService(BaseService):
@@ -21,6 +25,29 @@ class ClassroomsService(BaseService):
             ]
         }
 
+    async def get_classroom_by_id_with_students(
+        self,
+        classroom_id: UUID,
+        teacher_id: UUID,
+    ) -> Dict[str, Dict[str, list[StudentRead] | ClassroomRead]]:
+        stmt = (
+            select(Classroom)
+            .where(Classroom.id == classroom_id)
+            .options(selectinload(Classroom.students))
+        )
+        classroom = await self.db.scalar(stmt)
+        if classroom.teacher_id != teacher_id:
+            raise forbidden_exc
+        return {
+            "classroom_with_students": {
+                "classroom": ClassroomRead.model_validate(classroom),
+                "students": [
+                    StudentRead.model_validate(student)
+                    for student in classroom.students
+                ],
+            }
+        }
+
     async def create_classroom(
         self,
         classroom_create: ClassroomCreate,
@@ -34,16 +61,34 @@ class ClassroomsService(BaseService):
         self.db.add(classroom)
         await self.db.commit()
 
-    async def add_student_to_classroom(self, classroom_id: UUID, student_id: UUID):
-        stmt = select(Classroom).where(Classroom.id == classroom_id)
-        stmt2 = select(Student).where(Student.id == student_id)
+    async def add_student_to_classroom(
+        self,
+        classroom_id: UUID,
+        student_id: UUID,
+        teacher_id: UUID,
+    ):
+        stmt = (
+            select(Classroom)
+            .where(Classroom.id == classroom_id)
+            .options(selectinload(Classroom.students))
+        )
         classroom = await self.db.scalar(stmt)
+        print(classroom)
+        if classroom.teacher_id != teacher_id:
+            raise forbidden_exc
+        stmt2 = select(Student).where(Student.id == student_id)
         student = await self.db.scalar(stmt2)
+        if student in classroom.students:
+            raise student_already_in_classroom_exc
         classroom.students.append(student)
         classroom.amount_of_students += 1
         await self.db.commit()
 
-    async def remove_student_from_classroom(self, classroom_id: int, student_id: int):
+    async def remove_student_from_classroom(
+        self,
+        classroom_id: UUID,
+        student_id: UUID,
+    ):
         stmt = select(Classroom).where(Classroom.id == classroom_id)
         classroom = await self.db.scalar(stmt)
         classroom.students.remove(student_id)
