@@ -3,12 +3,7 @@ from sqlalchemy.orm import Mapped, mapped_column
 from core.models.base import Base
 
 from .mixins.uuid_pk import UUIDIdPkMixin
-from enum import Enum as PyEnum
-
-
-class RoleType(PyEnum):
-    TEACHER = "teacher"
-    STUDENT = "student"
+from backend_types import RoleType
 
 
 class User(UUIDIdPkMixin, Base):

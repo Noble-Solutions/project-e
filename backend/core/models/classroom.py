@@ -3,7 +3,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from .base import Base
 from .mixins.uuid_pk import UUIDIdPkMixin
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 if TYPE_CHECKING:
     from .user_roles import Teacher, Student
@@ -13,11 +13,13 @@ class Classroom(
     UUIDIdPkMixin,
     Base,
 ):
-    best_task_type: Mapped[int] = mapped_column(nullable=True)
-    best_task_percent: Mapped[int] = mapped_column(nullable=True)
-
-    worst_task_type: Mapped[int] = mapped_column(nullable=True)
-    worst_task_percent: Mapped[int] = mapped_column(nullable=True)
+    name: Mapped[str]
+    subject: Mapped[str]
+    amount_of_students: Mapped[int]
+    best_task_type: Mapped[Optional[int]]
+    best_task_percent: Mapped[Optional[int]]
+    worst_task_type: Mapped[Optional[int]]
+    worst_task_percent: Mapped[Optional[int]]
 
     teacher_id: Mapped[int] = mapped_column(
         ForeignKey(
