@@ -8,7 +8,6 @@ import { setAuthError, selectAuthError, selectCurrentUser } from "../../../entit
 
 import BackendError from "../../../shared/ui/BackendError";
 import { SuccessAlert } from "../../../shared/ui/Alerts";
-import { FaArrowLeftLong } from "react-icons/fa6";
 import { extendedFormElements } from "../../../shared/types/extendedForm";
 import { useAppDispatсh, useAppSelector } from "../../../shared/store";
 

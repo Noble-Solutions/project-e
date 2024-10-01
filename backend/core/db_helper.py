@@ -1,4 +1,3 @@
-from contextvars import ContextVar
 from sqlalchemy.ext.asyncio import (
     create_async_engine,
     AsyncEngine,
@@ -31,5 +30,3 @@ class DataBaseHelper:
 
 
 db_helper = DataBaseHelper()
-
-postgres_session: ContextVar["AsyncSession"] = ContextVar("session")

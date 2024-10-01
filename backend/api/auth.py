@@ -19,7 +19,7 @@ router = APIRouter(
 @router.post("/register")
 async def register(
     user: UserCreate,
-    auth_service: AuthService = Depends(get_service(AuthService)),
+    auth_service: AuthService = Depends(lambda: get_service(AuthService)),
 ):
     """
     Register a new user.
@@ -39,7 +39,7 @@ async def register(
 
 @router.post("/login")
 async def login(
-    auth_service: AuthService = Depends(get_service(AuthService)),
+    auth_service: AuthService = Depends(lambda: get_service(AuthService)),
     username: str = Form(...),
     password: str = Form(...),
 ):
@@ -60,4 +60,16 @@ async def login(
 
 @router.get("/me")
 async def get_current_user(user_schema: dict = Depends(get_current_token_payload)):
+    """
+    Get the current user's schema.
+
+    This endpoint retrieves the current user's schema by decoding the JWT token and
+    extracting the user's information. The user's schema is returned as a dictionary.
+
+    Returns:
+        dict: The user's schema.
+
+    Raises:
+        HTTPException: If the JWT token is invalid or cannot be decoded.
+    """
     return user_schema

@@ -8,7 +8,7 @@ type authState = {
     authError: FetchBaseQueryError | null
 }
 
-const authSlice = createSlice({
+export const authSlice = createSlice({
     name: 'auth',
     initialState: { 
         user: null,
@@ -39,5 +39,3 @@ const authSlice = createSlice({
 
 export const { setUser, setToken, setAuthError, logOut } = authSlice.actions
 export const { selectCurrentUser, selectCurrentToken, selectAuthError } = authSlice.selectors
-
-export default authSlice.reducer
