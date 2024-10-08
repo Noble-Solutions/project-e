@@ -3,7 +3,7 @@ import { extendedFormElements } from "../../../shared/types/extendedForm";
 import { useAppDispatсh } from "../../../shared/store"
 import { useLazyGetUserInfoQuery, useLoginMutation, useRegisterMutation,} from "../api/auth.api"
 import { setUser, setToken, setAuthError } from "../../../entities/user/model/user.slice"
-import { UserCreate } from "../../../shared/types/user";
+import { userCreate } from "../../../shared/types/user";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 
 export const useHandleLoginAndRegister = () => {
@@ -45,7 +45,7 @@ export const useHandleLoginAndRegister = () => {
                     dispatch(setUser(data))
                 })
             } else if (authType === 'register') {
-                const registerFormData: UserCreate = {
+                const registerFormData: userCreate = {
                     email: login,
                     password: password
                 }

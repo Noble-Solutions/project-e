@@ -33,7 +33,7 @@ def get_s3_service(service_class: Type) -> Callable:
     @lru_cache()
     def dependency_getter(
         client: S3Client = Depends(boto_client_helper.get_client),
-    ):
+    ) -> service_class:
         return service_class(client=client)
 
     return dependency_getter

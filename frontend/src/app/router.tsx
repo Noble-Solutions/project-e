@@ -3,7 +3,7 @@ import { PageNotFoundError } from '../shared/ui/PageNotFoundError';
 import { Auth } from '../pages/auth';
 import { Root } from '../pages/root';
 import { VariantList } from '../widgets/variantList';
-import { ClassList } from '../widgets/classList';
+import { ClassRoomsList } from '../widgets/classList';
 export const router = createBrowserRouter([
     {
         path: '/student/',
@@ -16,17 +16,18 @@ export const router = createBrowserRouter([
             },
             {
                 path: 'classes/',
-                element: <ClassList/>
+                element: <ClassRoomsList/>
             }
         ]
     },
     {
         path: '/teacher',
-        element: <PageNotFoundError/>,
+        element: <Root/>,
+        errorElement: <PageNotFoundError/>,
         children: [
             {
                 path: 'classes/',
-                element: <ClassList/>
+                element: <ClassRoomsList/>
             },
             {
                 path: 'variants/',

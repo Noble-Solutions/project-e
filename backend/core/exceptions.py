@@ -27,3 +27,8 @@ user_already_exists_exc = HTTPException(
     status_code=status.HTTP_403_FORBIDDEN,
     detail="Пользователь с таким именем пользователя уже существует",
 )
+
+invalid_data_for_request_exc = HTTPException(
+    status_code=status.HTTP_400_BAD_REQUEST,
+    detail="Неправильные данные для запроса",
+)

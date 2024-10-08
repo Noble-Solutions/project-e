@@ -16,6 +16,7 @@ class UserCreate(BaseModel):
 
 class UserRead(BaseModel):
     model_config = ConfigDict(from_attributes=True)
+    id: UUID
     username: str
     first_name: str
     last_name: str

@@ -1,12 +1,12 @@
 import { baseApi } from "../../../shared/api/api";
-import { userRead, UserCreate } from "../../../shared/types/user";
+import { userRead, userCreate } from "../../../shared/types/user";
 // TODO переписать типы UserRead и UserCreate
 import { loginData } from "../types/auth.types";
 // TODO переписать loginData когда добавлю рефреш токены
 
 const authApi = baseApi.injectEndpoints({
     endpoints: (create) => ({
-        register: create.mutation<userRead, UserCreate>({
+        register: create.mutation<userRead, userCreate>({
             query(user) {
                 return {
                     url: '/auth/register',

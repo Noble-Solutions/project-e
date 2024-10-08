@@ -20,7 +20,7 @@ class Variant(
     tasks: Mapped[list["Task"]] = relationship(
         secondary="variant_task_associations",
     )
-
+    total_tasks: Mapped[int]
     teacher_id: Mapped[int] = mapped_column(
         ForeignKey(
             "teachers.id",

@@ -19,13 +19,13 @@ router = APIRouter(
 @router.post("/register")
 async def register(
     user: UserCreate,
-    auth_service: AuthService = Depends(lambda: get_service(AuthService)),
+    auth_service: AuthService = Depends(get_service(AuthService)),
 ):
     """
     Register a new user.
 
     Args:
-        user (UserCreate): The user data to be registered.
+        user (UserCreate): The user url_fields_dictionary to be registered.
         auth_service (AuthService, optional): The authentication service dependency. Defaults to the result of calling `get_service(AuthService)`.
 
     Returns:
@@ -39,7 +39,7 @@ async def register(
 
 @router.post("/login")
 async def login(
-    auth_service: AuthService = Depends(lambda: get_service(AuthService)),
+    auth_service: AuthService = Depends(get_service(AuthService)),
     username: str = Form(...),
     password: str = Form(...),
 ):

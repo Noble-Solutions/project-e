@@ -21,31 +21,21 @@ export const Header = () => {
                         </span>
                     </div>
                     {
-                        currentUser?.role_type === 'student' &&
+                        currentUser &&
                         <>
                             <div className="flex items-center justify-center">
-                                Варианты
+                                <Link to={`/${currentUser?.role_type}/variants`}>
+                                    Варианты
+                                </Link>
                             </div>
                             <div className="flex items-center justify-center">
-                                Классы
+                                <Link to={`/${currentUser?.role_type}/classes`}>
+                                    Классы
+                                </Link>
                             </div>
                         </>
                     }
-                    {
-                        currentUser?.role_type === 'teacher' &&
-                        <>
-                            <div className="flex items-center justify-center">
-                                Мои Варианты
-                            </div>
-                            <div className="flex items-center justify-center">
-                                Мои Классы
-                            </div>
-                            <div className="flex items-center justify-center">
-                                Задания
-                            </div>
-                        </>
-                    }
-                     <div className="flex items-center lg:order-2">
+                    <div className="flex items-center lg:order-2">
                         {
                         currentUser === null ?
                         <>

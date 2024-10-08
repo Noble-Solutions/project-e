@@ -3,25 +3,48 @@ from uuid import UUID
 
 from fastapi import HTTPException
 from sqlalchemy import select
-from sqlalchemy.orm import selectinload
+from sqlalchemy.orm import selectinload, joinedload
 
-from core.models import Classroom, Student
+from core.models import Classroom, Student, StudentClassroomAssociation
 from core.schemas import ClassroomCreate, ClassroomRead
 from .base_service import BaseService
 from ..exceptions import forbidden_exc, student_already_in_classroom_exc
-from ..schemas.user import StudentRead
+from ..schemas.user import StudentRead, TeacherRead
 
 
 class ClassroomsService(BaseService):
     async def get_all_classrooms_of_teacher(
         self,
         teacher_id: UUID,
-    ) -> Dict[str, List[ClassroomRead]]:
+    ):
         stmt = select(Classroom).where(Classroom.teacher_id == teacher_id)
         classrooms = await self.db.scalars(stmt)
         return {
             "classrooms": [
-                ClassroomRead.model_validate(classroom) for classroom in classrooms
+                {
+                    "classroom_data": ClassroomRead.model_validate(classroom),
+                }
+                for classroom in classrooms
+            ]
+        }
+
+    async def get_all_classrooms_of_student(
+        self,
+        student_id: UUID,
+    ):
+        stmt = (
+            select(Student)
+            .where(Student.id == student_id)
+            .options(selectinload(Student.classrooms).joinedload(Classroom.teacher))
+        )
+        student = await self.db.scalar(stmt)
+        return {
+            "classrooms": [
+                {
+                    "classroom_data": ClassroomRead.model_validate(classroom),
+                    "teacher": TeacherRead.model_validate(classroom.teacher),
+                }
+                for classroom in student.classrooms
             ]
         }
 
