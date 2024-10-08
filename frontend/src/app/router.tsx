@@ -2,21 +2,40 @@ import { createBrowserRouter } from 'react-router-dom';
 import { PageNotFoundError } from '../shared/ui/PageNotFoundError';
 import { Auth } from '../pages/auth';
 import { Root } from '../pages/root';
-import { VariantList } from '../widgets/variantList';
-import { ClassRoomsList } from '../widgets/classList';
+import { VariantList } from '../features/variantList';
+import { ClassRoomsList } from '../features/classroomsList';
+import { VariantCreateForm } from '../features/variantCreate';
+import { Variants } from '../widgets/variants';
+import { Classrooms } from '../widgets/classrooms';
+import { ClassRoomsCreateForm } from '../features/classRoomCreate';
+import { Tasks } from '../widgets/tasks';
+import { TasksList } from '../features/taskList';
+import { TaskCreateForm } from '../features/taskCreate';
 export const router = createBrowserRouter([
     {
-        path: '/student/',
+        path: '/student',
         element: <Root/>,
         errorElement: <PageNotFoundError/>,
         children: [
             {
                 path: 'variants/',
-                element: <VariantList/>,
+                element: <Variants/>,
+                children: [
+                    {
+                        path: 'list/',
+                        element: <VariantList/>
+                    },
+                ]
             },
             {
                 path: 'classes/',
-                element: <ClassRoomsList/>
+                element: <Classrooms/>,
+                children: [
+                    {
+                        path: 'list/',
+                        element: <ClassRoomsList/>
+                    },
+                ]
             }
         ]
     },
@@ -27,15 +46,45 @@ export const router = createBrowserRouter([
         children: [
             {
                 path: 'classes/',
-                element: <ClassRoomsList/>
+                element: <Classrooms/>,
+                children: [
+                    {
+                        path: 'list/',
+                        element: <ClassRoomsList/>
+                    },
+                    {
+                        path: 'create/',
+                        element: <ClassRoomsCreateForm/>
+                    }
+                ]
             },
             {
                 path: 'variants/',
-                element: <VariantList/>
+                element: <Variants/>,
+                children: [
+                    {
+                        path: 'list/',
+                        element: <VariantList/>
+                    },
+                    {
+                        path: 'create/',
+                        element: <VariantCreateForm/>
+                    }
+                ]
             },
             {
                 path: 'tasks/',
-                element: <PageNotFoundError/>
+                element: <Tasks/>,
+                children: [
+                    {
+                        path: 'list/',
+                        element: <TasksList/>
+                    },
+                    {
+                        path: 'create/',
+                        element: <TaskCreateForm/>
+                    }
+                ]
             }
         ]
     },

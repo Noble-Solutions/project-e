@@ -1,5 +1,5 @@
-import { selectCurrentUser } from "../../../entities/user/model/user.slice";
-import { useAppSelector } from "../../../shared/store";
+import { selectCurrentUser } from "../entities/user/model/user.slice";
+import { useAppSelector } from "../shared/store";
 import { Link, useParams } from "react-router-dom";
 import { VscAccount } from "react-icons/vsc";
 // TODO: добавить логаут в хедер
@@ -24,15 +24,23 @@ export const Header = () => {
                         currentUser &&
                         <>
                             <div className="flex items-center justify-center">
-                                <Link to={`/${currentUser?.role_type}/variants`}>
+                                <Link to={`/${currentUser?.role_type}/variants/list`}>
                                     Варианты
                                 </Link>
                             </div>
                             <div className="flex items-center justify-center">
-                                <Link to={`/${currentUser?.role_type}/classes`}>
+                                <Link to={`/${currentUser?.role_type}/classes/list`}>
                                     Классы
                                 </Link>
                             </div>
+                            {
+                            currentUser.role_type === 'teacher' &&
+                            <div className="flex items-center justify-center">
+                                <Link to={`/teacher/tasks/list`}>
+                                    Задания
+                                </Link>
+                            </div>
+                            }
                         </>
                     }
                     <div className="flex items-center lg:order-2">
