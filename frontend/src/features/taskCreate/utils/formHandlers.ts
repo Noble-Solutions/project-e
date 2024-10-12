@@ -1,5 +1,5 @@
 import { FormEvent, RefObject } from "react";
-import { useLazyGetPresignedUrlForUploadToS3Query } from "../api/api";
+import {  useLazyCreateTaskQuery } from "../api/api";
 import { selectFileNameToGetPresignedUrlFor } from "../model/slice";
 import { useAppSelector } from "../../../shared/store";
 
@@ -14,11 +14,12 @@ export const manualFormSubmitTrigger =  (formRef: RefObject<HTMLFormElement>) =>
 }
 
 export const useMainTaskFormHandleSubmit = () => {
-    const [getPresignedUrlForUploadToS3QueryTrigger] = useLazyGetPresignedUrlForUploadToS3Query()
+    const [getPresignedUrlForUploadToS3QueryTrigger] = useLazyCreateTaskQuery()
     const fileNameToPassInGetPresignedUrlForUploadToS3Query = useAppSelector(selectFileNameToGetPresignedUrlFor)
     const handleSubmit = async () => {
         try {
-            await getPresignedUrlForUploadToS3QueryTrigger(fileNameToPassInGetPresignedUrlForUploadToS3Query)
+            const result = await getPresignedUrlForUploadToS3QueryTrigger(fileNameToPassInGetPresignedUrlForUploadToS3Query)
+            console.log(result)
         } catch (err) {
             console.log(err)
         }
