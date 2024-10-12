@@ -14,7 +14,9 @@ class AuthJWT(BaseModel):
 
 
 class Settings(BaseSettings):
-    model_config = SettingsConfigDict(env_file=".env", case_sensitive=False)
+    model_config = SettingsConfigDict(
+        env_file=".env", case_sensitive=False, extra="forbid"
+    )
     auth_jwt: AuthJWT = AuthJWT()
     echo: bool = True
     echo_pool: bool = False

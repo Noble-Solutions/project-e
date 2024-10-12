@@ -11,85 +11,94 @@ import { ClassRoomsCreateForm } from '../features/classRoomCreate';
 import { Tasks } from '../widgets/tasks';
 import { TasksList } from '../features/taskList';
 import { TaskCreateForm } from '../features/taskCreate';
+import { App } from './App';
 export const router = createBrowserRouter([
     {
-        path: '/student',
-        element: <Root/>,
+        path: '/',
+        element: <App/>,
         errorElement: <PageNotFoundError/>,
         children: [
             {
-                path: 'variants/',
-                element: <Variants/>,
+                path: 'student/',
+                element: <Root/>,
+                errorElement: <PageNotFoundError/>,
                 children: [
                     {
-                        path: 'list/',
-                        element: <VariantList/>
+                        path: 'variants/',
+                        element: <Variants/>,
+                        children: [
+                            {
+                                path: 'list/',
+                                element: <VariantList/>
+                            },
+                        ]
                     },
+                    {
+                        path: 'classes/',
+                        element: <Classrooms/>,
+                        children: [
+                            {
+                                path: 'list/',
+                                element: <ClassRoomsList/>
+                            },
+                        ]
+                    }
                 ]
             },
             {
-                path: 'classes/',
-                element: <Classrooms/>,
+                path: 'teacher/',
+                element: <Root/>,
+                errorElement: <PageNotFoundError/>,
                 children: [
                     {
-                        path: 'list/',
-                        element: <ClassRoomsList/>
+                        path: 'classes/',
+                        element: <Classrooms/>,
+                        children: [
+                            {
+                                path: 'list/',
+                                element: <ClassRoomsList/>
+                            },
+                            {
+                                path: 'create/',
+                                element: <ClassRoomsCreateForm/>
+                            }
+                        ]
                     },
+                    {
+                        path: 'variants/',
+                        element: <Variants/>,
+                        children: [
+                            {
+                                path: 'list/',
+                                element: <VariantList/>
+                            },
+                            {
+                                path: 'create/',
+                                element: <VariantCreateForm/>
+                            }
+                        ]
+                    },
+                    {
+                        path: 'tasks/',
+                        element: <Tasks/>,
+                        children: [
+                            {
+                                path: 'list/',
+                                element: <TasksList/>
+                            },
+                            {
+                                path: 'create/',
+                                element: <TaskCreateForm/>
+                            }
+                        ]
+                    }
                 ]
-            }
+            },
+            
         ]
     },
     {
-        path: '/teacher',
-        element: <Root/>,
-        errorElement: <PageNotFoundError/>,
-        children: [
-            {
-                path: 'classes/',
-                element: <Classrooms/>,
-                children: [
-                    {
-                        path: 'list/',
-                        element: <ClassRoomsList/>
-                    },
-                    {
-                        path: 'create/',
-                        element: <ClassRoomsCreateForm/>
-                    }
-                ]
-            },
-            {
-                path: 'variants/',
-                element: <Variants/>,
-                children: [
-                    {
-                        path: 'list/',
-                        element: <VariantList/>
-                    },
-                    {
-                        path: 'create/',
-                        element: <VariantCreateForm/>
-                    }
-                ]
-            },
-            {
-                path: 'tasks/',
-                element: <Tasks/>,
-                children: [
-                    {
-                        path: 'list/',
-                        element: <TasksList/>
-                    },
-                    {
-                        path: 'create/',
-                        element: <TaskCreateForm/>
-                    }
-                ]
-            }
-        ]
-    },
-    {
-        path: "/auth/:authType/",
+        path: "auth/:authType/",
         element: <Auth/>,
         errorElement: <PageNotFoundError/>,
         loader: ({ params }) => {
