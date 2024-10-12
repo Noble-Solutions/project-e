@@ -24,7 +24,7 @@ class S3BaseService:
         except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))
 
-        return generate_signed_url(response)
+        return response
 
     async def get_presigned_url_for_get_from_s3(
         self,

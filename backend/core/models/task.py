@@ -31,12 +31,7 @@ class Task(
         default="",
         server_default="",
     )
-    """
-    Пока закоменчу file_id до тех пор пока мы не начнем 
-    писать систему хранения файлов, будь то S3 или
-    какой то другой подход
-    """
-    # file_id: Mapped[UUID_ID]
+    file_id: Mapped[Optional[UUID_ID]]
     type_of_answer: Mapped[AnswerType]
     correct_answer: Mapped[Optional[str]]
 
