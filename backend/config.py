@@ -14,7 +14,9 @@ class AuthJWT(BaseModel):
 
 
 class Settings(BaseSettings):
-    model_config = SettingsConfigDict(env_file=".env", case_sensitive=False)
+    model_config = SettingsConfigDict(
+        env_file=".env", case_sensitive=False, extra="forbid"
+    )
     auth_jwt: AuthJWT = AuthJWT()
     echo: bool = True
     echo_pool: bool = False
@@ -26,6 +28,11 @@ class Settings(BaseSettings):
     DB_USER: str
     DB_PASS: str
     DB_NAME: str
+
+    aws_secret_access_key: str
+    aws_access_key_id: str
+    aws_region: str
+    s3_bucket_name: str = "project-e-bucket"
     # reset_password_token_secret: str
     # verification_token_secret: str
 

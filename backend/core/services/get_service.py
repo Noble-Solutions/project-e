@@ -3,7 +3,11 @@ from typing import Type, Callable
 
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
+from types_aiobotocore_s3 import S3Client
+
 from core.db_helper import db_helper
+from app import app
+from core.botoclient_helper import boto_client_helper
 
 
 def get_service(service_class: Type) -> Callable:
@@ -23,3 +27,13 @@ def get_service(service_class: Type) -> Callable:
         return service_class(pg=pg)
 
     return service
+
+
+def get_s3_service(service_class: Type) -> Callable:
+    @lru_cache()
+    def dependency_getter(
+        client: S3Client = Depends(boto_client_helper.get_client),
+    ) -> service_class:
+        return service_class(client=client)
+
+    return dependency_getter

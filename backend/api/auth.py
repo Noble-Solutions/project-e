@@ -25,7 +25,7 @@ async def register(
     Register a new user.
 
     Args:
-        user (UserCreate): The user data to be registered.
+        user (UserCreate): The user url_fields_dictionary to be registered.
         auth_service (AuthService, optional): The authentication service dependency. Defaults to the result of calling `get_service(AuthService)`.
 
     Returns:
@@ -60,4 +60,16 @@ async def login(
 
 @router.get("/me")
 async def get_current_user(user_schema: dict = Depends(get_current_token_payload)):
+    """
+    Get the current user's schema.
+
+    This endpoint retrieves the current user's schema by decoding the JWT token and
+    extracting the user's information. The user's schema is returned as a dictionary.
+
+    Returns:
+        dict: The user's schema.
+
+    Raises:
+        HTTPException: If the JWT token is invalid or cannot be decoded.
+    """
     return user_schema

@@ -1,0 +1,1 @@
+export {CRUDForm as ClassRoomsCreateForm} from './ui/CRUDform'
