@@ -1,19 +1,34 @@
 import { ChangeEvent, useEffect, useRef } from "react";
-import { useLazyGetPresignedUrlForUploadToS3Query } from "../api/api";
-import { useAppDispatсh } from "../../../shared/store";
+import { useCreateTaskMutation } from "../api/api";
+import { useAppDispatсh, useAppSelector } from "../../../shared/store";
 import { setFileNameToGetPresignedUrlFor } from "../model/slice";
-import { handleSubmitS3FileForm, manualFormSubmitTrigger } from "../utils/formHandlers";
+import { handleSubmitS3FileForm, } from "../utils/formHandlers";
+import { manualFormSubmitTrigger } from "../../../shared/utils/utils";
+import { selectFormData } from "../../../entities/task";
+
 export const S3SubmitForm = () => {
     const dispatch = useAppDispatсh()
     const formRef = useRef<HTMLFormElement>(null);
-    const[_, result] = useLazyGetPresignedUrlForUploadToS3Query()
+    const[_, result] = useCreateTaskMutation({
+        fixedCacheKey: 'shared-create-task',
+      })
+    const formData = useAppSelector(selectFormData)
+
     useEffect(() => {
+        console.log('rerender')
         console.log(result)
-    }, [])
+        console.log(result?.data)
+    }, [formData])
+    
     useEffect(() => {
+        console.log('triggered')
         if (result?.data) {
             console.log(result?.data)
-            manualFormSubmitTrigger(formRef)
+            if ('presigned_url_data_object' in result?.data) {
+                console.log('submitted to s3')
+                console.log(`${result?.data?.presigned_url_data_object?.url}`)
+                manualFormSubmitTrigger(formRef)
+            }
         }
     }, [result?.data])
 
@@ -25,24 +40,62 @@ export const S3SubmitForm = () => {
         <form 
         ref={formRef}
         onSubmit={handleSubmitS3FileForm}
-        action={`https://storage.yandexcloud.net/${result?.data?.bucket_name}`} 
-        method="post" 
-        encType="multipart/form-data">
+        >
             {/* Ключ в хранилище: */}
-            <input type="input" name="key" value={result?.data?.key} className="hidden" /><br />
+            <input
+            type="input" 
+            name="key" 
+            value={result?.data?.presigned_url_data_object?.fields.key} 
+            className="hidden" 
+            />
+            <br />
                 {/* <!-- Свойства запроса --> */}
-            <input type="hidden" name="X-Amz-Credential" value={result?.data?.["X-Amz-Credential"]} />
-            <input type="hidden" name="acl" value={result?.data?.acl} />
-            <input type="hidden" name="X-Amz-Algorithm" value={result?.data?.["X-Amz-Algorithm"]} />
-            <input type="hidden" name="X-Amz-Date" value={result?.data?.["X-Amz-Date"]} />
-            <input type="hidden" name="success_action_redirect" value={result?.data?.["success_action_redirect"]} />
-            <input type="hidden" name="policy" value={result?.data?.policy} />
-            <input type="hidden" name="X-Amz-Signature" value={result?.data?.["X-Amz-Signature"]} />
+            <input 
+            type="hidden" 
+            name="X-Amz-Credential" 
+            value={result?.data?.presigned_url_data_object?.fields["x-amz-credential"]} 
+            />
+
+            <input 
+            type="hidden" 
+            name="X-Amz-Algorithm" 
+            value={result?.data?.presigned_url_data_object?.fields["x-amz-algorithm"]} 
+            />
+
+            <input 
+            type="hidden" 
+            name="X-Amz-Date" 
+            value={result?.data?.presigned_url_data_object?.fields["x-amz-date"]} 
+            />
+
+            <input 
+            type="hidden" 
+            name="policy" 
+            value={result?.data?.presigned_url_data_object?.fields.policy} 
+            />
+
+            <input 
+            type="hidden" 
+            name="X-Amz-Signature" 
+            value={result?.data?.presigned_url_data_object?.fields["x-amz-signature"]} 
+            />
             {/* <!-- Прочие необходимые поля --> */}
             {/* Файл для загрузки: */}
-            <input type="file" name="file" onChange={handleFileChange}/> <br />
+            <input 
+            type="file" 
+            name="file" 
+            onChange={handleFileChange}
+            />
+
+            <br />
+
             {/* <!-- Поля после “file” игнорируются --> */}
-            <input type="submit" name="submit" value="Загрузить" className="hidden"/>
+            <input 
+            type="submit" 
+            name="submit" 
+            value="Загрузить" 
+            className="hidden"
+            />
         </form>
     )
 }

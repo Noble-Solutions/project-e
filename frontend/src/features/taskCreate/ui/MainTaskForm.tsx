@@ -1,16 +1,21 @@
-import { TaskFormFields } from "../../../shared/ui/TaskFormFields"
+import { TaskFormFields } from "../../../entities/task"
 import { S3SubmitForm } from "./s3SubmitForm"
 import { useMainTaskFormHandleSubmit } from "../utils/formHandlers"
-import { manualFormSubmitTrigger } from "../utils/formHandlers"
-import { useRef } from "react"
+import { useEffect, useRef } from "react"
+import { selectFormData } from "../../../entities/task"
+import { useAppSelector } from "../../../shared/store"
+import { manualFormSubmitTrigger } from "../../../shared/utils/utils"
+
 export const MainTaskForm = () => {
     const formRef = useRef<HTMLFormElement>(null);
     const { handleSubmit } = useMainTaskFormHandleSubmit()
+    const formData = useAppSelector(selectFormData)
+    
     return (
         <>
             <form 
             ref={formRef}
-            onSubmit={handleSubmit}
+            onSubmit={() => handleSubmit(formData)}
             >
                 <TaskFormFields />
             </form>
