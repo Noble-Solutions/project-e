@@ -1,4 +1,4 @@
-import { TaskFormContainer } from "../../../shared/ui/TaskFormContainer"
+import { TaskFormContainer } from "../../../entities/task/ui/TaskFormContainer"
 import { MainTaskForm } from "./MainTaskForm"
 
 export const TaskCreateForm = () => {

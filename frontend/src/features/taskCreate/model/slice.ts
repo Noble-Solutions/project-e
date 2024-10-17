@@ -1,12 +1,18 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { RefObject } from "react"
+
+interface S3FormState {
+    fileNameToGetPresignedUrlFor: string;
+
+}
+
+const initialState: S3FormState = {
+    fileNameToGetPresignedUrlFor: '',
+};
 
 export const s3FormSlice = createSlice({
     name: 's3Form',
-    initialState: {
-        fileNameToGetPresignedUrlFor: '',
-    } as {
-        fileNameToGetPresignedUrlFor: string,
-    },
+    initialState,
     reducers: {
         setFileNameToGetPresignedUrlFor(state, action: PayloadAction<string>) {
             state.fileNameToGetPresignedUrlFor = action.payload
@@ -19,8 +25,10 @@ export const s3FormSlice = createSlice({
 
 export const { 
     setFileNameToGetPresignedUrlFor, 
+
 } = s3FormSlice.actions
 
 export const { 
-    selectFileNameToGetPresignedUrlFor, 
+    selectFileNameToGetPresignedUrlFor,
+
 } = s3FormSlice.selectors

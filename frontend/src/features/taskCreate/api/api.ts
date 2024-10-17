@@ -1,27 +1,20 @@
 import { baseApi } from "../../../shared/api/api";
+import { taskCreateQueryResponse, taskCreateQueryBody } from "./types";
 
-type s3SubmitFormProps = {
-    "key": string,
-    "bucket_name": string,
-    "X-Amz-Credential": string,
-    "acl": string,
-    "X-Amz-Algorithm": string,
-    "X-Amz-Date": string,
-    "success_action_redirect": string,
-    "policy": string,
-    "X-Amz-Signature": string,
-}
+
+
 
 const taskCreateApi = baseApi.injectEndpoints({
     endpoints: (build) => ({
-        getPresignedUrlForUploadToS3: build.query<s3SubmitFormProps, string>({
-            query: (full_file_name) => ({
-                url: 'tasks/get_presigned_url_for_upload_to_s3',
-                method: 'GET',
-                params: { full_file_name }
+        createTask: 
+        build.mutation<taskCreateQueryResponse, taskCreateQueryBody>({
+            query: (arg) => ({
+                url: 'tasks/create_task',
+                method: 'POST',
+                body: arg
             })
         })
     })
 })
 
-export const { useLazyGetPresignedUrlForUploadToS3Query } = taskCreateApi
+export const { useCreateTaskMutation } = taskCreateApi
