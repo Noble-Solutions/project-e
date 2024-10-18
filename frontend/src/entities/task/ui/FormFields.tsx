@@ -1,7 +1,7 @@
-import { selectFormData, setFormData, resetForm } from "../model/slice"
+import { selectFormData, setFormData } from "../model/slice"
 import { useAppDispatсh, useAppSelector } from "../../../shared/store"
 import { ChangeEvent } from "react"
-export const TaskFormFields = () => {
+export const FormFields = () => {
     const dispatch = useAppDispatсh()
     const formData = useAppSelector(selectFormData)
 

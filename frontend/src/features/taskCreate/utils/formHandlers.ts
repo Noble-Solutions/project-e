@@ -17,8 +17,9 @@ export const handleSubmitS3FileForm = async (event: FormEvent<HTMLFormElement>) 
             method: 'POST',
             body: formData,
         })
-        const data = await response.json();
-        console.log(data);
+        if (response.status !== 204) {
+            throw new Error('Failed to upload file');
+        }
     } catch (error) {
         console.error('Error during submission:', error);
     }
@@ -35,7 +36,7 @@ export const useMainTaskFormHandleSubmit = () => {
     const handleSubmit = async (formData: TaskCreate) => {
         try {
             const file_extension = fileNameToPassInGetPresignedUrlForUploadToS3Query.split('.').pop()
-            const result = await createTask(
+            await createTask(
                 {
                     task_create: formData, 
                     file_extension

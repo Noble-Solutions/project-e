@@ -1,4 +1,4 @@
-export const TaskFormContainer = ({formElement, secondFormElement}: {formElement: React.ReactNode, secondFormElement?: React.ReactNode}) => {
+export const FormContainer = ({formElement, secondFormElement}: {formElement: React.ReactNode, secondFormElement?: React.ReactNode}) => {
     return (
         <section className="bg-white dark:bg-gray-900">
             <div className="py-8 px-4 mx-auto max-w-2xl lg:py-16">
