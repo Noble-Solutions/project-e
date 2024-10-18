@@ -32,6 +32,7 @@ class Task(
         server_default="",
     )
     file_id: Mapped[Optional[UUID_ID]]
+    file_extension: Mapped[Optional[str]]
     type_of_answer: Mapped[AnswerType]
     correct_answer: Mapped[Optional[str]]
 
