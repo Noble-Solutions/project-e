@@ -1,7 +1,7 @@
 import { TaskFormFields } from "../../../entities/task"
 import { S3SubmitForm } from "./s3SubmitForm"
 import { useMainTaskFormHandleSubmit } from "../utils/formHandlers"
-import { useEffect, useRef } from "react"
+import { useRef } from "react"
 import { selectFormData } from "../../../entities/task"
 import { useAppSelector } from "../../../shared/store"
 import { manualFormSubmitTrigger } from "../../../shared/utils/utils"
