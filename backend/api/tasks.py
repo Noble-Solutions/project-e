@@ -84,3 +84,17 @@ async def create_task(
     return {
         "task": task,
     }
+
+
+@router.get("/get_all_tasks_of_teacher")
+async def get_all_tasks_of_teacher(
+    teacher: Annotated[
+        "AccessTokenPayload",
+        Depends(get_current_teacher),
+    ],
+    task_service: Annotated[
+        "TasksService",
+        Depends(get_service(TasksService)),
+    ],
+):
+    return await task_service.get_all_tasks_of_teacher(teacher_id=teacher.id)

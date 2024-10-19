@@ -32,8 +32,3 @@ class TasksService(BaseService):
         self.db.add(task)
         await self.db.commit()
         return TaskRead.model_validate(task)
-
-    async def get_all_tasks_of_teacher(self, teacher_id: UUID) -> list[TaskRead]:
-        stmt = select(Task).where(Task.teacher_id == teacher_id)
-        tasks = await self.db.scalars(stmt)
-        return [TaskRead.model_validate(task) for task in tasks]
