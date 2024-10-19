@@ -30,6 +30,19 @@ def get_service(service_class: Type) -> Callable:
 
 
 def get_s3_service(service_class: Type) -> Callable:
+    """
+    Returns a cached function that creates an instance of the `service_class` with the provided `client` dependency.
+
+    Parameters:
+        service_class (Type): The class of the service to be returned.
+
+    Returns:
+        Callable: A cached function that creates an instance of the `service_class` with the provided `client` dependency.
+
+    Note:
+        This function uses the `lru_cache` decorator to cache the results of previous calls with the same arguments.
+    """
+
     @lru_cache()
     def dependency_getter(
         client: S3Client = Depends(boto_client_helper.get_client),
