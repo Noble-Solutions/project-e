@@ -45,11 +45,8 @@ class AuthService(BaseService):
         self,
         username: str,
     ) -> Teacher | Student | None:
-        # Fetch user with polymorphic loading to include role-specific fields
-        user_polymorphic = with_polymorphic(User, [Teacher, Student])
-        stmt = select(user_polymorphic).where(user_polymorphic.username == username)
+        stmt = select(User).where(User.username == username)
         user = await self.db.scalar(stmt)
-        print(user)
         return user
 
     async def _add_user_to_db(
