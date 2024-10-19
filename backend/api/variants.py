@@ -27,6 +27,21 @@ async def get_all_variants_of_student(
     ],
     student_id: Optional[int] = None,
 ):
+    """
+    Retrieves all variants associated with a specific student.
+
+    Parameters:
+        user (Annotated[AccessTokenPayload]): The user making the request.
+        variants_service (Annotated[VariantsService]): The variants service dependency.
+        student_id (Optional[int]): The ID of the student, if the user is a teacher.
+
+    Raises:
+        invalid_data_for_register_exc: If the user is neither a teacher nor a student, or if the user is a student
+        but student ID is provided.
+
+    Returns:
+        A list of all variants associated with the student.
+    """
     if user.role_type == "teacher" and student_id:
         id_to_use = student_id
     elif user.role_type == "student" and not student_id:

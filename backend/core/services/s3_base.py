@@ -14,6 +14,18 @@ class S3BaseService:
         self,
         full_file_name: str,
     ):
+        """
+        Asynchronously generates a presigned URL for uploading a file to an S3 bucket.
+
+        Args:
+            full_file_name (str): The full name of the file including the path.
+
+        Returns:
+            dict: A dictionary containing the presigned URL and other necessary information for uploading the file.
+
+        Raises:
+            HTTPException: If there is an error generating the presigned URL.
+        """
         try:
             response = await self.client.generate_presigned_post(
                 Bucket=settings.s3_bucket_name,
@@ -30,6 +42,18 @@ class S3BaseService:
         self,
         full_file_name: str,
     ):
+        """
+        Asynchronously generates a presigned URL for downloading a file from an S3 bucket.
+
+        Args:
+            full_file_name (str): The full name of the file including file name and extension.
+
+        Returns:
+            str: The presigned URL for downloading the file.
+
+        Raises:
+            HTTPException: If there is an error generating the presigned URL.
+        """
         try:
             response = await self.client.generate_presigned_url(
                 "get_object",

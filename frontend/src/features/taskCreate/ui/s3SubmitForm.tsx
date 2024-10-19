@@ -46,7 +46,7 @@ export const S3SubmitForm = () => {
             <input 
             type="hidden" 
             name="X-Amz-Credential" 
-            value='gbcz' 
+            value={result?.data?.presigned_url_data_object?.fields["x-amz-credential"]}
             />
 
             <input 

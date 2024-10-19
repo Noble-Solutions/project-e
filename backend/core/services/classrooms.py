@@ -17,6 +17,15 @@ class ClassroomsService(BaseService):
         self,
         teacher_id: UUID,
     ):
+        """
+        Asynchronously retrieves all classrooms associated with a teacher.
+
+        Args:
+            teacher_id (UUID): The ID of the teacher.
+
+        Returns:
+            dict: A dictionary containing a list of classrooms, where each classroom is represented by a dictionary with the key "classroom_data" and the value being the result of calling `ClassroomRead.model_validate(classroom)`.
+        """
         stmt = select(Classroom).where(Classroom.teacher_id == teacher_id)
         classrooms = await self.db.scalars(stmt)
         return {
@@ -32,6 +41,15 @@ class ClassroomsService(BaseService):
         self,
         student_id: UUID,
     ):
+        """
+        Asynchronously retrieves all classrooms associated with a student.
+
+        Args:
+            student_id (UUID): The ID of the student.
+
+        Returns:
+            dict: A dictionary containing a list of classrooms, where each classroom is represented by a dictionary with the keys "classroom_data" and "teacher". The "classroom_data" value is the result of calling `ClassroomRead.model_validate(classroom)`, and the "teacher" value is the result of calling `TeacherRead.model_validate(classroom.teacher)`.
+        """
         stmt = (
             select(Student)
             .where(Student.id == student_id)
@@ -53,6 +71,21 @@ class ClassroomsService(BaseService):
         classroom_id: UUID,
         teacher_id: UUID,
     ) -> Dict[str, Dict[str, list[StudentRead] | ClassroomRead]]:
+        """
+        Asynchronously retrieves a classroom by its ID along with its associated students.
+
+        Args:
+            classroom_id (UUID): The ID of the classroom to retrieve.
+            teacher_id (UUID): The ID of the teacher associated with the classroom.
+
+        Returns:
+            dict: A dictionary containing a dictionary with the keys "classroom_with_students" and "students".
+                  The "classroom_with_students" value is a dictionary with the keys "classroom" and "students".
+                  The "classroom" value is the result of calling `ClassroomRead.model_validate(classroom)`
+                  and the "students" value is a list of dictionaries, where each dictionary is the result of
+                  calling `StudentRead.model_validate(student)` for each student in the
+                  "classroom.students" list.
+        """
         stmt = (
             select(Classroom)
             .where(Classroom.id == classroom_id)
@@ -76,6 +109,16 @@ class ClassroomsService(BaseService):
         classroom_create: ClassroomCreate,
         teacher_id: UUID,
     ):
+        """
+        Asynchronously creates a new classroom.
+
+        Args:
+            classroom_create (ClassroomCreate): The data for creating the classroom.
+            teacher_id (UUID): The ID of the teacher associated with the classroom.
+
+        Returns:
+            None
+        """
         classroom = Classroom(
             **classroom_create.model_dump(),
             amount_of_students=0,
@@ -90,6 +133,21 @@ class ClassroomsService(BaseService):
         student_id: UUID,
         teacher_id: UUID,
     ):
+        """
+        Asynchronously adds a student to a classroom.
+
+        Args:
+            classroom_id (UUID): The ID of the classroom to add the student to.
+            student_id (UUID): The ID of the student to add to the classroom.
+            teacher_id (UUID): The ID of the teacher associated with the classroom.
+
+        Raises:
+            forbidden_exc: If the teacher ID does not match the teacher ID of the classroom.
+            student_already_in_classroom_exc: If the student is already in the classroom.
+
+        Returns:
+            None
+        """
         stmt = (
             select(Classroom)
             .where(Classroom.id == classroom_id)
@@ -112,6 +170,19 @@ class ClassroomsService(BaseService):
         classroom_id: UUID,
         student_id: UUID,
     ):
+        """
+        Asynchronously removes a student from a classroom.
+
+        Args:
+            classroom_id (UUID): The ID of the classroom to remove the student from.
+            student_id (UUID): The ID of the student to remove from the classroom.
+
+        Raises:
+            None.
+
+        Returns:
+            None.
+        """
         stmt = select(Classroom).where(Classroom.id == classroom_id)
         classroom = await self.db.scalar(stmt)
         classroom.students.remove(student_id)
