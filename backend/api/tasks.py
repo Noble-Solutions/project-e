@@ -25,6 +25,22 @@ async def check_boto_client_connection(
         Depends(boto_client_helper.get_client),
     ],
 ):
+    """
+    Check the connection to the Boto client.
+
+    This function uses the Boto client to list the available buckets. If the connection is successful,
+    it returns a list of buckets. If there is an exception during the connection, it raises an HTTPException
+    with a status code of 500 and the error message as the detail.
+
+    Parameters:
+        boto_client (Annotated[S3Client]): The Boto client dependency.
+
+    Returns:
+        List[Dict[str, Any]]: A list of buckets if the connection is successful.
+
+    Raises:
+        HTTPException: If there is an exception during the connection.
+    """
     try:
         buckets = await boto_client.list_buckets()
     except Exception as e:
@@ -37,6 +53,19 @@ async def get_presigned_url_for_upload_to_s3(
     full_file_name: str,
     s3_service=Depends(get_s3_service(service_class=S3BaseService)),
 ):
+    """
+    Asynchronously generates a presigned URL for uploading a file to an S3 bucket.
+
+    Args:
+        full_file_name (str): The full name of the file including the path.
+        s3_service (S3BaseService, optional): The S3 service dependency. Defaults to the result of `get_s3_service` with `service_class=S3BaseService`.
+
+    Returns:
+        dict: A dictionary containing the presigned URL and other necessary information for uploading the file.
+
+    Raises:
+        HTTPException: If there is an error generating the presigned URL.
+    """
     return await s3_service.get_presigned_url_for_upload_to_s3(full_file_name)
 
 
@@ -45,6 +74,19 @@ async def get_presigned_url_for_get_from_s3(
     full_file_name: str,
     s3_service=Depends(get_s3_service(service_class=S3BaseService)),
 ):
+    """
+    Asynchronously generates a presigned URL for downloading a file from an S3 bucket.
+
+    Args:
+        full_file_name (str): The full name of the file including file name and extension.
+        s3_service (S3BaseService, optional): The S3 service dependency. Defaults to the result of `get_s3_service` with `service_class=S3BaseService`.
+
+    Returns:
+        str: The presigned URL for downloading the file.
+
+    Raises:
+        HTTPException: If there is an error generating the presigned URL.
+    """
     response = await s3_service.get_presigned_url_for_get_from_s3(full_file_name)
     return response
 
