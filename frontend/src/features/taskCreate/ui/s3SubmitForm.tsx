@@ -1,25 +1,18 @@
 import { ChangeEvent, useEffect, useRef } from "react";
 import { useCreateTaskMutation } from "../api/api";
-import { useAppDispatсh, useAppSelector } from "../../../shared/store";
+import { useAppDispatсh } from "../../../shared/store";
 import { setFileNameToGetPresignedUrlFor } from "../model/slice";
 import { handleSubmitS3FileForm, } from "../utils/formHandlers";
 import { manualFormSubmitTrigger } from "../../../shared/utils/utils";
-import { selectFormData } from "../../../entities/task";
 
+//TODO отрефакторить эту залупу
 export const S3SubmitForm = () => {
     const dispatch = useAppDispatсh()
     const formRef = useRef<HTMLFormElement>(null);
     const[_, result] = useCreateTaskMutation({
         fixedCacheKey: 'shared-create-task',
       })
-    const formData = useAppSelector(selectFormData)
 
-    useEffect(() => {
-        console.log('rerender')
-        console.log(result)
-        console.log(result?.data)
-    }, [formData])
-    
     useEffect(() => {
         console.log('triggered')
         if (result?.data) {
@@ -53,7 +46,7 @@ export const S3SubmitForm = () => {
             <input 
             type="hidden" 
             name="X-Amz-Credential" 
-            value={result?.data?.presigned_url_data_object?.fields["x-amz-credential"]} 
+            value={result?.data?.presigned_url_data_object?.fields["x-amz-credential"]}
             />
 
             <input 

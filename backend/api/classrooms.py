@@ -125,6 +125,18 @@ async def add_student_to_classroom(
         Depends(get_service(ClassroomsService)),
     ],
 ):
+    """
+    Adds a student to a classroom.
+
+    Args:
+        classroom_id (UUID): The ID of the classroom to add the student to.
+        student_id (UUID): The ID of the student to add to the classroom.
+        teacher (Annotated["AccessTokenPayload"]): The teacher making the request.
+        classroom_service (Annotated["ClassroomsService"]): The classrooms service dependency.
+
+    Returns:
+        The result of calling `classroom_service.add_student_to_classroom` with the provided arguments.
+    """
     return await classroom_service.add_student_to_classroom(
         classroom_id=classroom_id,
         teacher_id=teacher.id,

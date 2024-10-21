@@ -1,4 +1,5 @@
-export { TaskFormContainer } from './ui/TaskFormContainer'
-export { TaskFormFields } from './ui/TaskFormFields'
+export { FormContainer as TaskFormContainer } from './ui/FormContainer'
+export { FormFields as TaskFormFields } from './ui/FormFields'
 export { selectFormData } from './model/slice'
 export { taskFormFieldsSlice } from './model/slice'
+export type { TaskRead } from './types/types'
