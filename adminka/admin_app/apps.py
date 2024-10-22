@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class AdminPanelAppConfig(AppConfig):
+class AdminAppConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
-    name = "admin_panel_app"
+    name = "admin_app"

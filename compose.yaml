@@ -13,6 +13,22 @@ services:
       - /dev/null:/app/package-lock.json
     networks:
       - custom
+      
+  #django admin panel
+  admin_panel:
+    build: ./adminka
+    volumes:
+      - ./adminka:/app
+      - /app/.venv
+    environment:
+      - PYTHONDONTWRITEBYTECODE=1
+      - PYTHONUNBUFFERED=1
+    depends_on:
+      - db
+    ports:
+      - "6786:6786"
+    networks:
+      - custom
 
   #fastapi app
   backend:
