@@ -1,8 +1,11 @@
 from uuid import UUID
 
-from pydantic import BaseModel, Field, ConfigDict
+from pydantic import BaseModel, Field, ConfigDict, model_validator
 from backend_types import RoleType
-from typing import Annotated, Optional
+from typing import Annotated, Optional, Self
+
+from core.models.base_user import Subject
+from core.utils.exceptions import invalid_data_for_register_exc
 
 
 class UserCreate(BaseModel):
@@ -11,7 +14,15 @@ class UserCreate(BaseModel):
     first_name: str
     last_name: str
     role_type: RoleType
-    subject: Optional[str] = Field(None)
+    subject: Optional[Subject] = Field(None)
+
+    @model_validator(mode="after")
+    def check_subject(self) -> Self:
+        if self.role_type == "teacher" and self.subject is None:
+            raise invalid_data_for_register_exc
+        if self.role_type == "student" and self.subject is not None:
+            raise invalid_data_for_register_exc
+        return self
 
 
 class UserRead(BaseModel):
@@ -21,20 +32,14 @@ class UserRead(BaseModel):
     first_name: str
     last_name: str
     role_type: RoleType
+    subject: Optional[Subject]
 
 
 class AccessTokenPayload(BaseModel):
     id: UUID
     username: str
     role_type: RoleType
-
-
-class TeacherRead(UserRead):
-    subject: Annotated[Optional[str], Field(default=None)]
-
-
-class StudentRead(UserRead):
-    pass
+    subject: Optional[Subject]
 
 
 class UserCreateInDB(UserCreate):

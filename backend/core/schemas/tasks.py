@@ -11,6 +11,7 @@ class TaskCreate(BaseModel):
     type: int
     type_of_answer: AnswerType
     correct_answer: Optional[str] = None
+    points_per_task: int = 1
 
     @model_validator(mode="after")
     def check_answer(self) -> Self:
@@ -32,8 +33,13 @@ class TaskRead(BaseModel):
     id: UUID
     text: str
     type: int
+    points_per_task: int
     type_of_answer: AnswerType
     correct_answer: Optional[str]
     file_id: Optional[UUID]
     file_extension: Optional[str]
-    teacher_id: Optional[UUID]
+    teacher_id: UUID
+
+
+class GetAllTasksResponseModel(BaseModel):
+    tasks: list[TaskRead]
