@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, relationship, mapped_column
 from core.models.base import Base
@@ -6,28 +8,34 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from .task import Task
-    from .user_roles import Student, Teacher
+    from .base_user import User
 
 
 class Variant(
     UUIDIdPkMixin,
     Base,
 ):
-    students: Mapped[list["Student"]] = relationship(
-        back_populates="variants",
-        secondary="student_variant_associations",
-    )
-    tasks: Mapped[list["Task"]] = relationship(
-        secondary="variant_task_associations",
-    )
-    total_tasks: Mapped[int]
-    teacher_id: Mapped[int] = mapped_column(
+    name: Mapped[str]
+    subject: Mapped[str]
+    amount_of_tasks: Mapped[int]
+    maximum_score_from_short_answer_task: Mapped[int]
+    teacher_id: Mapped[UUID] = mapped_column(
         ForeignKey(
-            "teachers.id",
+            "users.id",
             ondelete="cascade",
         )
     )
+
     teacher: Mapped["Teacher"] = relationship(
-        "Teacher",
+        "User",
         back_populates="variants",
+    )
+
+    students: Mapped[list["User"]] = relationship(
+        back_populates="variants_of_student",
+        secondary="student_variant_associations",
+    )
+
+    tasks: Mapped[list["Task"]] = relationship(
+        secondary="variant_task_associations",
     )

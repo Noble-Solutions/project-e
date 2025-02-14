@@ -21,7 +21,7 @@ class StudentPerformance(UUIDIdPkMixin, Base):
         ),
     )
 
-    student_id: Mapped[int] = mapped_column(ForeignKey("students.id"))
+    student_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
     classroom_id: Mapped[int] = mapped_column(ForeignKey("classrooms.id"))
     task_type: Mapped[int]
     total_solved: Mapped[int]
