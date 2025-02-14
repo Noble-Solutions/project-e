@@ -5,6 +5,7 @@ from typing import Annotated
 
 from sqlalchemy import select
 from sqlalchemy.orm import joinedload
+from starlette import status
 
 from core.models import Classroom, StudentClassroomAssociation
 from core.schemas import ClassroomCreate
@@ -23,7 +24,7 @@ router = APIRouter(
 )
 
 
-@router.get("/get_all_classrooms_of_user")
+@router.get("/get_all_classrooms_of_user", status_code=status.HTTP_200_OK)
 async def get_all_classrooms_of_user(
     user: Annotated[
         "AccessTokenPayload",
@@ -54,7 +55,7 @@ async def get_all_classrooms_of_user(
         )
 
 
-@router.get("/get_classroom_by_id_with_students")
+@router.get("/get_classroom_by_id_with_students", status_code=status.HTTP_200_OK)
 async def get_classroom_by_id_with_students(
     classroom_id: UUID,
     teacher: Annotated[
@@ -83,7 +84,7 @@ async def get_classroom_by_id_with_students(
     )
 
 
-@router.post("/create_classroom")
+@router.post("/create_classroom", status_code=status.HTTP_201_CREATED)
 async def create_classroom(
     classroom_create: ClassroomCreate,
     teacher: Annotated[
@@ -112,8 +113,63 @@ async def create_classroom(
     )
 
 
-@router.post("/add_student_to_classroom")
-async def add_student_to_classroom(
+@router.put("/update_classroom", status_code=status.HTTP_200_OK)
+async def update_classroom(
+    classroom_id: UUID,
+    classroom_update: ClassroomCreate,
+    teacher: Annotated[
+        "AccessTokenPayload",
+        Depends(get_current_teacher),
+    ],
+    classroom_service: Annotated[
+        "ClassroomsService",
+        Depends(get_service(ClassroomsService)),
+    ],
+):
+    return await classroom_service.update_classroom(
+        classroom_id=classroom_id,
+        classroom_update=classroom_update,
+        teacher_id=teacher.id,
+    )
+
+
+@router.delete("/delete_classroom", status_code=status.HTTP_200_OK)
+async def delete_classroom(
+    classroom_id: UUID,
+    teacher: Annotated[
+        "AccessTokenPayload",
+        Depends(get_current_teacher),
+    ],
+    classroom_service: Annotated[
+        "ClassroomsService",
+        Depends(get_service(ClassroomsService)),
+    ],
+):
+    await classroom_service.delete_classroom(
+        classroom_id=classroom_id,
+        teacher_id=teacher.id,
+    )
+
+
+@router.get("/find_student", status_code=status.HTTP_200_OK)
+async def find_student(
+    student_name: str,
+    teacher: Annotated[
+        "AccessTokenPayload",
+        Depends(get_current_teacher),
+    ],
+    classroom_service: Annotated[
+        "ClassroomsService",
+        Depends(get_service(ClassroomsService)),
+    ],
+):
+    return await classroom_service.find_student_by_username(
+        username=student_name,
+    )
+
+
+@router.post("/add_student", status_code=status.HTTP_200_OK)
+async def add_student(
     classroom_id: UUID,
     student_id: UUID,
     teacher: Annotated[
@@ -141,4 +197,24 @@ async def add_student_to_classroom(
         classroom_id=classroom_id,
         teacher_id=teacher.id,
         student_id=student_id,
+    )
+
+
+@router.delete("/delete_student", status_code=status.HTTP_200_OK)
+async def delete_student(
+    classroom_id: UUID,
+    student_id: UUID,
+    teacher: Annotated[
+        "AccessTokenPayload",
+        Depends(get_current_teacher),
+    ],
+    classroom_service: Annotated[
+        "ClassroomsService",
+        Depends(get_service(ClassroomsService)),
+    ],
+):
+    return await classroom_service.remove_student_from_classroom(
+        classroom_id=classroom_id,
+        student_id=student_id,
+        teacher_id=teacher.id,
     )

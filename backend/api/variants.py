@@ -1,12 +1,14 @@
 from typing import Annotated, Optional
+from uuid import UUID
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Path
+from starlette import status
 
-from core.exceptions import invalid_data_for_register_exc
+from core.schemas.variant import VariantCreate
 from core.schemas.user import AccessTokenPayload
 from core.services.get_service import get_service
 from core.services.variants import VariantsService
-from core.utils.auth_utils import get_current_user
+from core.utils.auth_utils import get_current_user, get_current_teacher
 
 router = APIRouter(
     prefix="/variants",
@@ -14,9 +16,8 @@ router = APIRouter(
 )
 
 
-#
-@router.get("/get_all_variants_of_student")
-async def get_all_variants_of_student(
+@router.get("/", status_code=status.HTTP_200_OK)
+async def get_all_variants_of_user(
     user: Annotated[
         "AccessTokenPayload",
         Depends(get_current_user),
@@ -25,27 +26,189 @@ async def get_all_variants_of_student(
         "VariantsService",
         Depends(get_service(VariantsService)),
     ],
-    student_id: Optional[int] = None,
 ):
-    """
-    Retrieves all variants associated with a specific student.
+    return await variants_service.get_all_variants_of_user(
+        user_id=user.id,
+        user_role=user.role_type,
+    )
 
-    Parameters:
-        user (Annotated[AccessTokenPayload]): The user making the request.
-        variants_service (Annotated[VariantsService]): The variants service dependency.
-        student_id (Optional[int]): The ID of the student, if the user is a teacher.
 
-    Raises:
-        invalid_data_for_register_exc: If the user is neither a teacher nor a student, or if the user is a student
-        but student ID is provided.
+@router.get("/{variant_id}/", status_code=status.HTTP_200_OK)
+async def get_variant_by_id_with_tasks(
+    user: Annotated[
+        "AccessTokenPayload",
+        Depends(get_current_user),
+    ],
+    variant_id: Annotated[UUID, Path],
+    variants_service: Annotated[
+        "VariantsService",
+        Depends(get_service(VariantsService)),
+    ],
+):
+    return await variants_service.get_variant_by_id_with_tasks(
+        variant_id=variant_id,
+        user_id=user.id,
+        user_role=user.role_type,
+    )
 
-    Returns:
-        A list of all variants associated with the student.
-    """
-    if user.role_type == "teacher" and student_id:
-        id_to_use = student_id
-    elif user.role_type == "student" and not student_id:
-        id_to_use = user.id
-    else:
-        raise invalid_data_for_register_exc
-    return await variants_service.get_all_variants_of_student(id_to_use)
+
+@router.post("/", status_code=status.HTTP_201_CREATED)
+async def create_variant(
+    teacher: Annotated[
+        "AccessTokenPayload",
+        Depends(get_current_teacher),
+    ],
+    variant_create: VariantCreate,
+    variants_service: Annotated[
+        "VariantsService",
+        Depends(get_service(VariantsService)),
+    ],
+):
+
+    return await variants_service.create_variant(
+        variant_create=variant_create,
+        teacher_id=teacher.id,
+    )
+
+
+@router.put("/{variant_id}/", status_code=status.HTTP_200_OK)
+async def update_variant(
+    teacher: Annotated[
+        "AccessTokenPayload",
+        Depends(get_current_teacher),
+    ],
+    variant_id: Annotated[UUID, Path],
+    variant_update: VariantCreate,
+    variants_service: Annotated[
+        "VariantsService",
+        Depends(get_service(VariantsService)),
+    ],
+):
+    return await variants_service.update_variant(
+        variant_id=variant_id,
+        variant_update=variant_update,
+        teacher_id=teacher.id,
+    )
+
+
+@router.delete("/{variant_id}/", status_code=status.HTTP_200_OK)
+async def delete_variant(
+    teacher: Annotated[
+        "AccessTokenPayload",
+        Depends(get_current_teacher),
+    ],
+    variant_id: Annotated[UUID, Path],
+    variants_service: Annotated[
+        "VariantsService",
+        Depends(get_service(VariantsService)),
+    ],
+):
+    return await variants_service.delete_variant(
+        variant_id=variant_id,
+        teacher_id=teacher.id,
+    )
+
+
+@router.post("/add_task/{variant_id}/task/{task_id}", status_code=status.HTTP_200_OK)
+async def add_task_to_variant(
+    teacher: Annotated[
+        "AccessTokenPayload",
+        Depends(get_current_teacher),
+    ],
+    variant_id: Annotated[UUID, Path],
+    task_id: Annotated[UUID, Path],
+    variants_service: Annotated[
+        "VariantsService",
+        Depends(get_service(VariantsService)),
+    ],
+):
+    return await variants_service.add_task_to_variant(
+        variant_id=variant_id,
+        task_id=task_id,
+        teacher_id=teacher.id,
+    )
+
+
+@router.delete(
+    "/remove_task/{variant_id}/task/{task_id}",
+    status_code=status.HTTP_200_OK,
+)
+async def remove_task_from_variant(
+    teacher: Annotated[
+        "AccessTokenPayload",
+        Depends(get_current_teacher),
+    ],
+    variant_id: Annotated[UUID, Path],
+    task_id: Annotated[UUID, Path],
+    variants_service: Annotated[
+        "VariantsService",
+        Depends(get_service(VariantsService)),
+    ],
+):
+    return await variants_service.remove_task_from_variant(
+        variant_id=variant_id,
+        task_id=task_id,
+        teacher_id=teacher.id,
+    )
+
+
+@router.get("/check/{variant_id}", status_code=status.HTTP_200_OK)
+async def check_variant(
+    variant_id: Annotated[UUID, Path],
+    task_id_to_answer: dict[UUID, str | int],
+    variants_service: Annotated[
+        "VariantsService",
+        Depends(get_service(VariantsService)),
+    ],
+):
+    return await variants_service.check_variant(
+        variant_id=variant_id,
+        task_id_to_answer=task_id_to_answer,
+    )
+
+
+@router.post(
+    "/assign_to_student/{variant_id}/{student_id}", status_code=status.HTTP_200_OK
+)
+async def assign_variant_to_student(
+    variant_id: Annotated[UUID, Path],
+    student_id: Annotated[UUID, Path],
+    teacher: Annotated[
+        "AccessTokenPayload",
+        Depends(get_current_teacher),
+    ],
+    variants_service: Annotated[
+        "VariantsService",
+        Depends(get_service(VariantsService)),
+    ],
+):
+    await variants_service.assign_variant_to_student(
+        variant_id=variant_id,
+        student_id=student_id,
+        teacher_id=teacher.id,
+    )
+
+    return {"status": "ok"}
+
+
+@router.post(
+    "/assign_to_classroom/{variant_id}/{classroom_id}", status_code=status.HTTP_200_OK
+)
+async def assign_variant_to_all_students_in_classroom(
+    variant_id: Annotated[UUID, Path],
+    classroom_id: Annotated[UUID, Path],
+    teacher: Annotated[
+        "AccessTokenPayload",
+        Depends(get_current_teacher),
+    ],
+    variants_service: Annotated[
+        "VariantsService",
+        Depends(get_service(VariantsService)),
+    ],
+):
+    await variants_service.assign_variant_to_all_students_in_classroom(
+        variant_id=variant_id,
+        classroom_id=classroom_id,
+        teacher_id=teacher.id,
+    )
+    return {"status": "ok"}
