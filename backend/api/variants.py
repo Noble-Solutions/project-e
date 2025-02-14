@@ -4,7 +4,11 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, Path
 from starlette import status
 
-from core.schemas.variant import VariantCreate
+from core.schemas.response_models.variant import (
+    GetVariantByIDWithTasksResponse,
+    GetAllVariantsResponse,
+)
+from core.schemas.variant import VariantCreate, VariantRead
 from core.schemas.user import AccessTokenPayload
 from core.services.get_service import get_service
 from core.services.variants import VariantsService
@@ -16,7 +20,11 @@ router = APIRouter(
 )
 
 
-@router.get("/", status_code=status.HTTP_200_OK)
+@router.get(
+    "/",
+    status_code=status.HTTP_200_OK,
+    response_model=GetAllVariantsResponse,
+)
 async def get_all_variants_of_user(
     user: Annotated[
         "AccessTokenPayload",
@@ -33,7 +41,11 @@ async def get_all_variants_of_user(
     )
 
 
-@router.get("/{variant_id}/", status_code=status.HTTP_200_OK)
+@router.get(
+    "/{variant_id}/",
+    status_code=status.HTTP_200_OK,
+    response_model=GetVariantByIDWithTasksResponse,
+)
 async def get_variant_by_id_with_tasks(
     user: Annotated[
         "AccessTokenPayload",
@@ -52,7 +64,11 @@ async def get_variant_by_id_with_tasks(
     )
 
 
-@router.post("/", status_code=status.HTTP_201_CREATED)
+@router.post(
+    "/",
+    status_code=status.HTTP_201_CREATED,
+    response_model=VariantRead,
+)
 async def create_variant(
     teacher: Annotated[
         "AccessTokenPayload",
@@ -71,7 +87,11 @@ async def create_variant(
     )
 
 
-@router.put("/{variant_id}/", status_code=status.HTTP_200_OK)
+@router.put(
+    "/{variant_id}/",
+    status_code=status.HTTP_200_OK,
+    response_model=VariantRead,
+)
 async def update_variant(
     teacher: Annotated[
         "AccessTokenPayload",

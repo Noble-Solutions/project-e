@@ -56,12 +56,7 @@ class VariantsService(BaseService):
             for variant in variants:
                 print(VariantRead.model_validate(variant))
         return {
-            "variants": [
-                {
-                    "variant_data": VariantRead.model_validate(variant),
-                }
-                for variant in variants
-            ]
+            "variants": [VariantRead.model_validate(variant) for variant in variants]
         }
 
     async def get_variant_by_id_with_tasks(
