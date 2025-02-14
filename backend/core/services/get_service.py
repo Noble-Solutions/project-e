@@ -5,9 +5,8 @@ from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from types_aiobotocore_s3 import S3Client
 
-from core.db_helper import db_helper
-from app import app
-from core.botoclient_helper import boto_client_helper
+from core.db.db_helper import db_helper
+from core.db.botoclient_helper import boto_client_helper
 
 
 def get_service(service_class: Type) -> Callable:
