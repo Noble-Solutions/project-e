@@ -15,3 +15,8 @@ class VariantReadAndTaskRead(BaseModel):
 
 class GetVariantByIDWithTasksResponse(BaseModel):
     variant: VariantReadAndTaskRead
+
+
+class CheckVariantResponse(BaseModel):
+    maximum_points: int
+    points_earned_by_student: int

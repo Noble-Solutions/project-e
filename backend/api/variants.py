@@ -7,6 +7,7 @@ from starlette import status
 from core.schemas.response_models.variant import (
     GetVariantByIDWithTasksResponse,
     GetAllVariantsResponse,
+    CheckVariantResponse,
 )
 from core.schemas.variant import VariantCreate, VariantRead
 from core.schemas.user import AccessTokenPayload
@@ -172,7 +173,11 @@ async def remove_task_from_variant(
     )
 
 
-@router.get("/check/{variant_id}", status_code=status.HTTP_200_OK)
+@router.post(
+    "/check/{variant_id}",
+    status_code=status.HTTP_200_OK,
+    response_model=CheckVariantResponse,
+)
 async def check_variant(
     variant_id: Annotated[UUID, Path],
     task_id_to_answer: dict[UUID, str | int],

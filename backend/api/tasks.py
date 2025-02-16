@@ -125,7 +125,7 @@ async def create_task(
             "presigned_url_data_object": presigned_url_data_object,
         }
 
-    return task
+    return {"task": task}
 
 
 @router.get(

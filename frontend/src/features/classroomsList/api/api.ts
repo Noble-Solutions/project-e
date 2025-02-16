@@ -7,7 +7,8 @@ const classroomsApi = baseApi.injectEndpoints({
             query: () => ({
                 url: '/classrooms/get_all_classrooms_of_user',
                 method: 'GET'
-            })
+            }),
+            providesTags: ['Classrooms']
         })
     })
 })

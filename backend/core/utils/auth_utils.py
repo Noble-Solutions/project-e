@@ -13,7 +13,7 @@ from starlette import status
 
 from backend_types import RoleType
 from config import settings
-from core.exceptions import unauthed_exc, forbidden_exc
+from core.utils.exceptions import forbidden_exc
 from core.schemas.user import AccessTokenPayload
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/login")

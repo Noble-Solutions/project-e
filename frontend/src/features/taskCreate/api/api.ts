@@ -12,8 +12,10 @@ const taskCreateApi = baseApi.injectEndpoints({
                 url: 'tasks/create_task',
                 method: 'POST',
                 body: arg
-            })
-        })
+            }),
+            invalidatesTags: ['Tasks']
+        }),
+        
     })
 })
 

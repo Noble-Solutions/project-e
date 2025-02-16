@@ -12,6 +12,9 @@ import { Tasks } from '../widgets/tasks';
 import { TasksList } from '../features/taskList';
 import { TaskCreateForm } from '../features/taskCreate';
 import { App } from './App';
+import { AddStudent, MainList, SingleClassroom } from '../features/singleClassroom';
+import { SingleVariant, TaskList, VariantResults } from '../features/singleVariant';
+
 export const router = createBrowserRouter([
     {
         path: '/',
@@ -31,6 +34,20 @@ export const router = createBrowserRouter([
                                 path: 'list/',
                                 element: <VariantList/>
                             },
+                            {
+                                path: 'single/:id',
+                                element: <SingleVariant/>,
+                                children: [
+                                    {
+                                        path: 'main-widget/:task_id?',
+                                        element: <TaskList />
+                                    },
+                                    {
+                                        path: 'variant-results',
+                                        element: <VariantResults/>
+                                    }
+                                ]
+                            }
                         ]
                     },
                     {
@@ -41,10 +58,26 @@ export const router = createBrowserRouter([
                                 path: 'list/',
                                 element: <ClassRoomsList/>
                             },
+                            {
+                                path: 'single/:id',
+                                element: <SingleClassroom/>,
+                                children: [
+                                    {
+                                        path: 'main-widget',
+                                        element: <MainList />
+                                    },
+                                ]
+
+                            }
                         ]
                     }
                 ]
             },
+    
+
+
+
+            // TEACHER ROUTES
             {
                 path: 'teacher/',
                 element: <Root/>,
@@ -61,6 +94,21 @@ export const router = createBrowserRouter([
                             {
                                 path: 'create/',
                                 element: <ClassRoomsCreateForm/>
+                            },
+                            {
+                                path: 'single/:id',
+                                element: <SingleClassroom/>,
+                                children: [
+                                    {
+                                        path: 'main-widget',
+                                        element: <MainList />
+                                    },
+                                    {
+                                        path: 'add-student/',
+                                        element: <AddStudent/>
+                                    },
+                                ]
+
                             }
                         ]
                     },
@@ -75,6 +123,16 @@ export const router = createBrowserRouter([
                             {
                                 path: 'create/',
                                 element: <VariantCreateForm/>
+                            },
+                            {
+                                path: 'single/:id',
+                                element: <SingleVariant/>,
+                                children: [
+                                    {
+                                        path: 'main-widget/:task_id?',
+                                        element: <TaskList />
+                                    },
+                                ]
                             }
                         ]
                     },
@@ -83,11 +141,11 @@ export const router = createBrowserRouter([
                         element: <Tasks/>,
                         children: [
                             {
-                                path: 'list/',
+                                path: 'list/:variant_id?',
                                 element: <TasksList/>
                             },
                             {
-                                path: 'create/',
+                                path: 'create/:variant_id?',
                                 element: <TaskCreateForm/>
                             }
                         ]

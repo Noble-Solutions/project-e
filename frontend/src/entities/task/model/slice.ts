@@ -4,7 +4,7 @@ import { TaskCreate } from "../types/types";
 const initialState: TaskCreate = {
     type: 0,
     text: '',
-    type_of_answer: 'full_answer',
+    type_of_answer: 'short_answer',
     correct_answer: undefined,
 }
 

@@ -5,7 +5,7 @@ export const FormFields = () => {
     const dispatch = useAppDispatсh()
     const formData = useAppSelector(selectFormData)
 
-    const handleFieldChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const handleFieldChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = event.target
         dispatch(setFormData({[name]: value }))
     }
@@ -42,15 +42,13 @@ export const FormFields = () => {
                 <div className="w-full">
                     <label>
                         Тип ответа
-                        <input 
-                        type="text" 
-                        name="type_of_answer" 
-                        required={true}
-                        onChange={handleFieldChange}
+                        <select 
+                        onChange={(e: ChangeEvent<HTMLSelectElement>) => handleFieldChange(e)}
                         value={formData.type_of_answer}
-                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" 
-                        placeholder="$2999"
-                        />
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <option value="teacher">short_answer</option>
+                            <option value="student">full_answer</option>
+                        </select>
                     </label>
                 </div>
                 {formData.type_of_answer === 'short_answer' &&
