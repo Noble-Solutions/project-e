@@ -1,4 +1,4 @@
-from pydantic import PostgresDsn, BaseModel
+from pydantic import BaseModel
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from pathlib import Path
 
@@ -9,30 +9,39 @@ class AuthJWT(BaseModel):
     private_key_path: Path = BASE_DIR / "certs" / "jwt-private.pem"
     public_key_path: Path = BASE_DIR / "certs" / "jwt-public.pem"
     algorithm: str = "RS256"
-    access_token_expire_minutes: int = 15
+    access_token_expire_minutes: int = 45
     refresh_token_expire_days: int = 30
+
+
+class DatabaseSettings(BaseModel):
+    echo: bool = False
+    echo_pool: bool = False
+    pool_size: int = 5
+    max_overflow: int = 10
 
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=".env", case_sensitive=False, extra="forbid"
     )
-    auth_jwt: AuthJWT = AuthJWT()
-    echo: bool = True
-    echo_pool: bool = False
-    pool_size: int = 5
-    max_overflow: int = 10
 
+    auth_jwt: AuthJWT = AuthJWT()
+
+    # настройки базы данных
+    database: DatabaseSettings = DatabaseSettings()
     DB_HOST: str
     DB_PORT: int
     DB_USER: str
     DB_PASS: str
     DB_NAME: str
 
+    # настройки s3
     aws_secret_access_key: str
     aws_access_key_id: str
     aws_region: str
     s3_bucket_name: str = "project-e-bucket"
+
+    # две строчки ниже понадобятся когда мы добавим верификацию аккаунта и восстановления пароля
     # reset_password_token_secret: str
     # verification_token_secret: str
 

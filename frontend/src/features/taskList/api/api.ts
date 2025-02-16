@@ -7,16 +7,12 @@ const taskListApi = baseApi.injectEndpoints({
             query: () => ({
                 url: '/tasks/get_all_tasks_of_teacher',
                 method: 'GET'
-            })
+            }),
+            transformResponse: (response: {tasks: TaskRead[]}) => response.tasks,
+            providesTags: ['Tasks']
         }),
-        getPresignedUrlForGetFromS3: build.query<string, string>({
-            query: (arg) => ({
-                url: `/tasks/get_presigned_url_for_get_from_s3`,
-                method: 'GET',
-                params: { full_file_name: arg }
-            })
-        })
+        
     })
 })
 
-export const { useGetAllTasksOfTeacherQuery, useGetPresignedUrlForGetFromS3Query } = taskListApi
+export const { useGetAllTasksOfTeacherQuery } = taskListApi

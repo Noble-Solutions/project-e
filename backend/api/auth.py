@@ -3,9 +3,8 @@ from fastapi import APIRouter, Depends, Form
 from core.utils.auth_utils import get_current_token_payload
 from core.services.get_service import get_service
 from core.services.auth import AuthService
-from core.schemas import UserCreate
+from core.schemas.user import UserCreate, UserRead
 from fastapi.security import HTTPBearer
-from core.schemas.user import TeacherRead, StudentRead
 
 http_bearer = HTTPBearer(auto_error=False)
 
@@ -16,7 +15,7 @@ router = APIRouter(
 )
 
 
-@router.post("/register")
+@router.post("/register", status_code=201)
 async def register(
     user: UserCreate,
     auth_service: AuthService = Depends(get_service(AuthService)),
@@ -26,13 +25,14 @@ async def register(
 
     Args:
         user (UserCreate): The user url_fields_dictionary to be registered.
-        auth_service (AuthService, optional): The authentication service dependency. Defaults to the result of calling `get_service(AuthService)`.
+        auth_service (AuthService): The authentication service dependency. Defaults to the result of calling `get_service(AuthService)`.
 
     Returns:
-        TeacherRead | StudentRead | None: The registered user.
+        UserRead: The registered user's url_fields_dictionary.
 
-    Raise:
-        HTTPException: If the user already exists.
+    Raises:
+            user_already_exists_exc: If a user with the same username already exists in the database.
+            invalid_data_for_register_exc: If the user's data is invalid for registration.
     """
     return await auth_service.register_new_user(user)
 

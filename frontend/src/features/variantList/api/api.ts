@@ -1,14 +1,35 @@
 import { baseApi } from "../../../shared/api/api";
+import { VariantList, VariantRead } from "./types";
 
-const variantsApi = baseApi.injectEndpoints({
+const classroomsApi = baseApi.injectEndpoints({
     endpoints: (build) => ({
-        getVariants: build.query({
+        getAllVariantsOfUser: build.query<VariantRead[], void>({
             query: () => ({
-                url: '/variants',
+                url: 'variants/',
                 method: 'GET'
-            })
+            }),
+            providesTags: ['Variants'],
+            transformResponse: (response: {variants: VariantRead[]}) => response.variants
+        }),
+        assignVariantToStudent: build.mutation<void, {variant_id: string, student_id: string}>({
+            query: ({variant_id, student_id}) => ({
+                url: `variants/assign_variant_to_student/${variant_id}/${student_id}`,
+                method: 'POST',
+            }),
+            invalidatesTags: ['Classrooms']
+        }),
+        assignVariantToClassroom: build.mutation<void, {variant_id: string, classroom_id: string}>({
+            query: ({variant_id, classroom_id}) => ({
+                url: `variants/assign_to_classroom/${variant_id}/${classroom_id}`,
+                method: 'POST',
+            }),
+            invalidatesTags: ['Classrooms']
         })
     })
 })
 
-export const { useGetVariantsQuery } = variantsApi
+export const { 
+    useGetAllVariantsOfUserQuery, 
+    useAssignVariantToStudentMutation, 
+    useAssignVariantToClassroomMutation, 
+} = classroomsApi

@@ -14,5 +14,7 @@ class VariantTaskAssociation(UUIDIdPkMixin, Base):
         ),
     )
 
-    variant_id: Mapped[int] = mapped_column(ForeignKey("variants.id"))
-    task_id: Mapped[int] = mapped_column(ForeignKey("tasks.id"))
+    variant_id: Mapped[int] = mapped_column(
+        ForeignKey("variants.id", ondelete="CASCADE")
+    )
+    task_id: Mapped[int] = mapped_column(ForeignKey("tasks.id", ondelete="CASCADE"))

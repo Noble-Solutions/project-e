@@ -14,8 +14,17 @@ class StudentClassroomAssociation(UUIDIdPkMixin, Base):
         ),
     )
 
-    student_id: Mapped[int] = mapped_column(ForeignKey("students.id"))
-    classroom_id: Mapped[int] = mapped_column(ForeignKey("classrooms.id"))
+    student_id: Mapped[int] = mapped_column(
+        ForeignKey(
+            "users.id",
+        )
+    )
+    classroom_id: Mapped[int] = mapped_column(
+        ForeignKey(
+            "classrooms.id",
+            ondelete="CASCADE",
+        )
+    )
 
     student_best_task_type: Mapped[int] = mapped_column(nullable=True)
     student_best_task_percent: Mapped[int] = mapped_column(nullable=True)

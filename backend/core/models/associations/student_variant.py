@@ -14,5 +14,10 @@ class StudentVariantAssociation(UUIDIdPkMixin, Base):
         ),
     )
 
-    student_id: Mapped[int] = mapped_column(ForeignKey("students.id"))
-    variant_id: Mapped[int] = mapped_column(ForeignKey("variants.id"))
+    student_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    variant_id: Mapped[int] = mapped_column(
+        ForeignKey(
+            "variants.id",
+            ondelete="CASCADE",
+        )
+    )

@@ -1,4 +1,5 @@
 services:
+  #фронтенд
   frontend:
     build: ./frontend
     container_name: project_e_frontend
@@ -13,8 +14,24 @@ services:
       - /dev/null:/app/package-lock.json
     networks:
       - custom
+      
+  #админ панель нашего приложения
+  admin_panel:
+    build: ./adminka
+    volumes:
+      - ./adminka:/app
+      - /app/.venv
+    environment:
+      - PYTHONDONTWRITEBYTECODE=1
+      - PYTHONUNBUFFERED=1
+    depends_on:
+      - db
+    ports:
+      - "6786:6786"
+    networks:
+      - custom
 
-  #fastapi app
+  #основная апишка нашего приложения
   backend:
     build: ./backend
     container_name: project_e_backend
@@ -27,6 +44,8 @@ services:
       - db
     networks:
       - custom
+
+  # просто база данных для разработки
   db:
     image: postgres
     container_name: project_e_db
@@ -36,6 +55,19 @@ services:
       POSTGRES_PASSWORD: admin
     ports:
       - "5432:5432"
+    networks:
+      - custom
+
+  # база данных для прогона тестов
+  test_db:
+    image: postgres
+    container_name: project_e_test_db
+    environment:
+      POSTGRES_DB: v
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+    ports:
+      - "5433:5432"
     networks:
       - custom
 

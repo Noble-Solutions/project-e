@@ -1,12 +1,14 @@
 # from botocore.client import BaseClient
 from typing import Annotated, Optional
+from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException, Body
+from fastapi import APIRouter, Depends, HTTPException, Body, Path
+from starlette import status
 from types_aiobotocore_s3 import S3Client
 
-from config import settings
-from core.botoclient_helper import boto_client_helper
-from core.schemas.tasks import TaskCreate
+from core.db.botoclient_helper import boto_client_helper
+from core.schemas.tasks import TaskCreate, TaskRead, GetAllTasksResponseModel
+from core.schemas.user import AccessTokenPayload
 from core.services.get_service import get_s3_service, get_service
 from core.services.s3_base import S3BaseService
 from core.services.tasks import TasksService
@@ -91,7 +93,7 @@ async def get_presigned_url_for_get_from_s3(
     return response
 
 
-@router.post("/create_task")
+@router.post("/create_task", status_code=status.HTTP_201_CREATED)
 async def create_task(
     task_create: TaskCreate,
     teacher: Annotated[
@@ -106,7 +108,7 @@ async def create_task(
         "S3BaseService",
         Depends(get_s3_service(service_class=S3BaseService)),
     ],
-    file_extension: Optional[str] = Body(...),
+    file_extension: Optional[str] = Body(default=None),
 ):
     task = await task_service.create_task(
         task_create=task_create,
@@ -123,12 +125,14 @@ async def create_task(
             "presigned_url_data_object": presigned_url_data_object,
         }
 
-    return {
-        "task": task,
-    }
+    return {"task": task}
 
 
-@router.get("/get_all_tasks_of_teacher")
+@router.get(
+    "/get_all_tasks_of_teacher",
+    status_code=status.HTTP_200_OK,
+    response_model=GetAllTasksResponseModel,
+)
 async def get_all_tasks_of_teacher(
     teacher: Annotated[
         "AccessTokenPayload",
@@ -140,3 +144,82 @@ async def get_all_tasks_of_teacher(
     ],
 ):
     return await task_service.get_all_tasks_of_teacher(teacher_id=teacher.id)
+
+
+@router.put(
+    "/{task_id}/",
+    status_code=status.HTTP_200_OK,
+    response_model=TaskRead,
+)
+async def update_task(
+    task_id: Annotated[UUID, Path],
+    task_update: TaskCreate,
+    teacher: Annotated[
+        "AccessTokenPayload",
+        Depends(get_current_teacher),
+    ],
+    task_service: Annotated[
+        "TasksService",
+        Depends(get_service(TasksService)),
+    ],
+    s3_service: Annotated[
+        "S3BaseService",
+        Depends(get_s3_service(service_class=S3BaseService)),
+    ],
+    file_extension: Optional[str] = Body(default=None),
+) -> TaskRead:
+    return await task_service.update_task(
+        task_id=task_id,
+        task_update=task_update,
+        teacher_id=teacher.id,
+        file_extension=file_extension,
+    )
+
+
+@router.patch(
+    "/{task_id}/",
+    status_code=status.HTTP_200_OK,
+    response_model=TaskRead,
+)
+async def update_task_partial(
+    task_id: Annotated[UUID, Path],
+    task_update: TaskCreate,
+    teacher: Annotated[
+        "AccessTokenPayload",
+        Depends(get_current_teacher),
+    ],
+    task_service: Annotated[
+        "TasksService",
+        Depends(get_service(TasksService)),
+    ],
+    s3_service: Annotated[
+        "S3BaseService",
+        Depends(get_s3_service(service_class=S3BaseService)),
+    ],
+    file_extension: Optional[str] = Body(default=None),
+) -> TaskRead:
+    return await task_service.update_task(
+        task_id=task_id,
+        task_update=task_update,
+        teacher_id=teacher.id,
+        file_extension=file_extension,
+        partial=True,
+    )
+
+
+@router.delete(
+    "/{task_id}/",
+    status_code=status.HTTP_200_OK,
+)
+async def delete_task(
+    task_id: Annotated[UUID, Path],
+    teacher: Annotated[
+        "AccessTokenPayload",
+        Depends(get_current_teacher),
+    ],
+    task_service: Annotated[
+        "TasksService",
+        Depends(get_service(TasksService)),
+    ],
+):
+    return await task_service.delete_task(task_id=task_id, teacher_id=teacher.id)

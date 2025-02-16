@@ -1,4 +1,4 @@
-import { FormEvent} from "react"
+import { ChangeEvent, FormEvent, useState} from "react"
 import { useParams, useNavigate } from "react-router-dom"
 
 
@@ -14,13 +14,13 @@ import { useAppDispatсh, useAppSelector } from "../../../shared/store";
 export const Auth = () => {
     const { authType } = useParams<{authType: string}>()
     const navigate = useNavigate()
-    
+    const [chosenRole, setChosenRole] = useState<string>('teacher');
     const dispatch = useAppDispatсh()
     const authError = useAppSelector(selectAuthError)
     const currentUser = useAppSelector(selectCurrentUser)
     //hook for handling login and register
     const { handleLoginAndRegister, isLoginSuccess, isRegisterSuccess } = useHandleLoginAndRegister()
-    
+    console.log(chosenRole)
     return (
         <section className="bg-gray-50 dark:bg-gray-900 relative">
             <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
@@ -60,19 +60,81 @@ export const Auth = () => {
                                 type="text" 
                                 name="email" 
                                 id="email" 
-                                className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="login" required={true}/>
+                                className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                placeholder="user123" 
+                                required={true}/>
                             </div>
                             <div>
                                 <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Ваш пароль</label>
                                 <input 
-                                onFocus={() => setAuthError(null)} 
+                                onFocus={() => dispatch(setAuthError(null))} 
                                 type="password" 
                                 name="password" 
                                 id="password" 
                                 placeholder="••••••••" 
                                 className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required={true}/>
                             </div>
-                            
+                            {authType === 'register' && 
+                            <>
+                                <div>
+                                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                        Ваше имя
+                                    </label>
+                                    <input 
+                                    onFocus={() => dispatch(setAuthError(null))} 
+                                    type="text" 
+                                    name="first_name" 
+                                    id="first_name" 
+                                    className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                    placeholder="Иван" 
+                                    required={true}/>
+                                </div>
+                                <div>
+                                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                        Ваша фамилия
+                                    </label>
+                                    <input 
+                                    onFocus={() => dispatch(setAuthError(null))} 
+                                    type="text" 
+                                    name="last_name" 
+                                    id="last_name" 
+                                    className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                    placeholder="Иванов" 
+                                    required={true}/>
+                                </div>
+                                <div>
+                                    <label  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Выберите вашу роль</label>
+                                    <select 
+                                    onChange={(e: ChangeEvent<HTMLSelectElement>) => setChosenRole(e.target.value)}
+                                    value={chosenRole}
+                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                        <option value="teacher">Учитель</option>
+                                        <option value="student">Ученик</option>
+                                    </select>
+                                </div>
+                                {chosenRole === 'teacher' &&
+                                <div>
+                                    <label  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Выберите ваш предмет</label>
+                                    <select 
+                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                        <option value="informatics">Информатика</option>
+                                        <option value="math">Математика</option>
+                                        <option value="russian">Русский язык</option>
+                                        <option value="english">Английский язык</option>
+                                        <option value="french">Французский язык</option>
+                                        <option value="spanish">Испанский язык</option>
+                                        <option value="german">Немецкий язык</option>
+                                        <option value="history">История</option>
+                                        <option value="social_studies">Обществознание</option>
+                                        <option value="geography">География</option>
+                                        <option value="biology">Биология</option>
+                                        <option value="chemistry">Химия</option>
+                                        <option value="physics">Физика</option>
+                                    </select>
+                                </div>
+                                }
+                            </>
+                            }
                             <button type="submit" className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
                                 {authType === 'login' ? 'Войти' : 'Зарегистрироваться'}
                             </button>

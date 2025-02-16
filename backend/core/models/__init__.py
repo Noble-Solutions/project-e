@@ -1,8 +1,6 @@
 __all__ = (
     "Base",
     "User",
-    "Teacher",
-    "Student",
     "Variant",
     "Task",
     "Classroom",
@@ -15,7 +13,7 @@ __all__ = (
 
 from .base import Base
 from .task import Task
-from .user_roles import Student, Teacher, User
+from .base_user import User
 from .variant import Variant
 from .classroom import Classroom
 from .associations import (

@@ -6,4 +6,6 @@ app.include_router(api_router)
 
 @app.get("/")
 async def root():
+    for route in app.routes:
+        print(route.path)
     return {"message": "Hello world"}

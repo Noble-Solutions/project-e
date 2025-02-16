@@ -5,7 +5,6 @@ from pydantic import BaseModel, ConfigDict
 
 class ClassroomCreate(BaseModel):
     name: str
-    subject: str
 
 
 class ClassroomRead(BaseModel):

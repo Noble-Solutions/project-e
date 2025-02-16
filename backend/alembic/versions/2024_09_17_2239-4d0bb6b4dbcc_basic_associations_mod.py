@@ -40,7 +40,6 @@ def upgrade() -> None:
     sa.ForeignKeyConstraint(['student_id'], ['students.id'], name=op.f('fk_student_variant_associations_student_id_students')),
     sa.ForeignKeyConstraint(['variant_id'], ['variants.id'], name=op.f('fk_student_variant_associations_variant_id_variants')),
     sa.PrimaryKeyConstraint('id', name=op.f('pk_student_variant_associations')),
-    sa.UniqueConstraint('student_id', 'variant_id', name='idx_unique_student_variant')
     )
     op.create_table('variant_task_associations',
     sa.Column('variant_id', sa.Uuid(), nullable=False),
@@ -49,7 +48,6 @@ def upgrade() -> None:
     sa.ForeignKeyConstraint(['task_id'], ['tasks.id'], name=op.f('fk_variant_task_associations_task_id_tasks')),
     sa.ForeignKeyConstraint(['variant_id'], ['variants.id'], name=op.f('fk_variant_task_associations_variant_id_variants')),
     sa.PrimaryKeyConstraint('id', name=op.f('pk_variant_task_associations')),
-    sa.UniqueConstraint('variant_id', 'task_id', name='idx_unique_variant_task')
     )
     # ### end Alembic commands ###
 

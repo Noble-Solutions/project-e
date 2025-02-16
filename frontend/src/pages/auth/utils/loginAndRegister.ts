@@ -25,7 +25,10 @@ export const useHandleLoginAndRegister = () => {
         
         const { elements } = e.currentTarget
         const login = elements[0].value
-        const password = elements[1].value 
+        const password = elements[1].value
+        if (authType === 'register') {
+            
+        } 
         const form = e.currentTarget
         try {
             if (authType === 'login') {
@@ -45,9 +48,20 @@ export const useHandleLoginAndRegister = () => {
                     dispatch(setUser(data))
                 })
             } else if (authType === 'register') {
+                const firstName = elements[2].value
+                const lastName = elements[3].value
+                const roleType = elements[4].value
+                let teacherSubject = null
+                if (roleType === 'teacher') {
+                    teacherSubject = elements[5].value
+                }
                 const registerFormData: userCreate = {
-                    email: login,
-                    password: password
+                    username: login,
+                    password: password,
+                    first_name: firstName, 
+                    last_name: lastName,
+                    role_type: roleType,
+                    subject: teacherSubject
                 }
                 await registerRequest(registerFormData).unwrap()
             }

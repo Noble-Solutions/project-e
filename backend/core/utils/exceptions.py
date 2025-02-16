@@ -1,6 +1,5 @@
 from fastapi import HTTPException
 from starlette import status
-from .constants import invalid_auth_credentials
 
 
 invalid_data_for_register_exc = HTTPException(
@@ -11,6 +10,11 @@ invalid_data_for_register_exc = HTTPException(
 student_already_in_classroom_exc = HTTPException(
     status_code=status.HTTP_400_BAD_REQUEST,
     detail="Ученик уже в этом классе",
+)
+
+task_already_in_variant_exc = HTTPException(
+    status_code=status.HTTP_400_BAD_REQUEST,
+    detail="Задание уже в этом варианте",
 )
 
 unauthed_exc = HTTPException(
@@ -26,6 +30,11 @@ forbidden_exc = HTTPException(
 user_already_exists_exc = HTTPException(
     status_code=status.HTTP_403_FORBIDDEN,
     detail="Пользователь с таким именем пользователя уже существует",
+)
+
+user_not_found_exc = HTTPException(
+    status_code=status.HTTP_404_NOT_FOUND,
+    detail="Пользователь не надйен",
 )
 
 invalid_data_for_request_exc = HTTPException(

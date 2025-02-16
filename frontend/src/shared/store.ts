@@ -3,13 +3,15 @@ import { baseApi } from "./api/api"
 import { authSlice} from "../entities/user/model/user.slice"
 import { s3FormSlice } from "../features/taskCreate/model/slice";
 import { taskFormFieldsSlice } from "../entities/task";
+import { variantAnswersSlice } from "../features/singleVariant/model/slice";
 import { useDispatch, useSelector, useStore } from "react-redux";
 export const store = configureStore({
     reducer: {
         [baseApi.reducerPath]: baseApi.reducer,
         [authSlice.reducerPath]: authSlice.reducer,
         [s3FormSlice.reducerPath]: s3FormSlice.reducer,
-        [taskFormFieldsSlice.reducerPath]: taskFormFieldsSlice.reducer
+        [taskFormFieldsSlice.reducerPath]: taskFormFieldsSlice.reducer,
+        [variantAnswersSlice.reducerPath]: variantAnswersSlice.reducer
     },
     devTools: true,
     middleware: getDefaultMiddleware => getDefaultMiddleware().concat(baseApi.middleware)

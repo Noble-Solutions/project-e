@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom"
 import { useGetAllTasksOfTeacherQuery } from "../api/api"
-import { Card } from "./Card"
+import { TaskCard } from "../../../entities/task"
 import BackendError from "../../../shared/ui/BackendError"
 export const List = () => {
     const { 
@@ -9,7 +9,6 @@ export const List = () => {
         error: tasksListDataError, 
         isError: isTasksListDataError 
     } = useGetAllTasksOfTeacherQuery()
-    console.log(tasksListData)
     return (
         // TODO отстилизовать кнопку создать задание
         <div>
@@ -26,7 +25,7 @@ export const List = () => {
                     <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-x-10 gap-y-10 ">
                         {
                         isTasksListDataSuccess &&
-                        tasksListData.map((task) => <Card key={task.id} {...task}/>)
+                        tasksListData.map((task) => <TaskCard key={task.id} {...task}/>)
                         }
                     </div>
                 </div>

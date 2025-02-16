@@ -3,7 +3,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
-from core.db_helper import db_helper
+from core.db.db_helper import db_helper
 
 
 @asynccontextmanager

@@ -5,11 +5,9 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from typing import TYPE_CHECKING, Optional
 
 from .base import Base
+from .mixins.timestamp import TimestampMixin
 from .mixins.uuid_pk import UUIDIdPkMixin
 from enum import Enum as PyEnum
-
-
-UUID_ID = UUID
 
 
 class AnswerType(PyEnum):
@@ -18,11 +16,12 @@ class AnswerType(PyEnum):
 
 
 if TYPE_CHECKING:
-    from .user_roles import Teacher
+    from .base_user import User
 
 
 class Task(
     UUIDIdPkMixin,
+    TimestampMixin,
     Base,
 ):
     type: Mapped[int]
@@ -31,18 +30,19 @@ class Task(
         default="",
         server_default="",
     )
-    file_id: Mapped[Optional[UUID_ID]]
+    points_per_task: Mapped[int]
+    file_id: Mapped[Optional[UUID]]
     file_extension: Mapped[Optional[str]]
     type_of_answer: Mapped[AnswerType]
     correct_answer: Mapped[Optional[str]]
 
-    teacher_id: Mapped[int] = mapped_column(
+    teacher_id: Mapped[UUID] = mapped_column(
         ForeignKey(
-            "teachers.id",
+            "users.id",
             ondelete="cascade",
         )
     )
     teacher: Mapped["Teacher"] = relationship(
-        "Teacher",
+        "User",
         back_populates="tasks",
     )
