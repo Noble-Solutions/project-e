@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 // Define the type for the state
 interface MyState {
-    variantAnswers: { [key: string]: string }; // Object with string keys and string values
+    variantAnswers: { [key: string]: string  }; // Object with string keys and string values
 }
 
 // Initial state
@@ -16,9 +16,9 @@ export const variantAnswersSlice = createSlice({
     initialState,
     reducers: {
         // Action to add a key-value pair to the object
-        addAnswerToTask: (state, action: PayloadAction<{ task_id: string | undefined; answer: string | undefined }>) => {
+        addAnswerToTask: (state, action: PayloadAction<{ task_id: string | undefined; answer: string }>) => {
             const { task_id, answer } = action.payload;
-            if (!task_id || !answer) {
+            if (!task_id) {
                 return;
             }
             state.variantAnswers[task_id] = answer;

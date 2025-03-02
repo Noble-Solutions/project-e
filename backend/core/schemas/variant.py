@@ -1,3 +1,4 @@
+from typing import Optional
 from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict
@@ -15,3 +16,4 @@ class VariantRead(BaseModel):
     amount_of_tasks: int
     maximum_score_from_short_answer_task: int
     teacher_id: UUID
+    classroom_id: Optional[UUID] = None

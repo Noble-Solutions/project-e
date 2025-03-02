@@ -18,12 +18,12 @@ export const useHandleSingleVariantMutations = () => {
             }
         }
 
-        const handleCheckVariant = async (variant_id: string | undefined, answers: {[key: string]: string}) => {
+        const handleCheckVariant = async (variant_id: string | undefined, answers: {[key: string]: string}, classroom_id: string | undefined) => {
             try {
-                if (!variant_id) {
-                    throw new Error('variant_id is undefined')
+                if (!variant_id || !classroom_id) {
+                    throw new Error('variant_id or classroom_id is undefined')
                 }
-                await checkVariant({variant_id, answers})
+                await checkVariant({variant_id, classroom_id, answers})
             } catch (err) {
                 console.log(err)
             }

@@ -11,9 +11,10 @@ const singleVariantApi = baseApi.injectEndpoints({
             providesTags: ['Variants'],
             transformResponse: (response: {variant: getVariantByIdWithTasksResponse}) => response.variant,
         }),
-        checkVariant: build.mutation<checkVariantResponse, {variant_id: string,  answers: {[key: string]: string }}>({
-            query: ({variant_id, answers}) => ({
+        checkVariant: build.mutation<checkVariantResponse, {variant_id: string, classroom_id: string, answers: {[key: string]: string }}>({
+            query: ({variant_id, classroom_id, answers}) => ({
                 url: `variants/check/${variant_id}`,
+                params: { classroom_id },
                 method: 'POST',
                 body: answers
             })
