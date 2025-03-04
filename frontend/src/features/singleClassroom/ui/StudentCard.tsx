@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { studentRead } from "../../../shared/types/user"
 import { MdDelete } from "react-icons/md";
 import { useRemoveStudentFromClassroomMutation } from "../api/api";
@@ -24,12 +24,13 @@ export const StudentCard = ({student}: {student: studentRead}) => {
             }
     }
     return (
-        <li className="group flex flex-row justify-between items-center p-2 border-black border-opacity-20 border-2 rounded-lg shadow-md" key={student.id}>
-            <p className="transition-all duration-1000 ease-in-out group-hover:underline">
-                {student.first_name} {student.last_name}
-            </p>
-            <MdDelete onClick={handleDeleteStudentButtonClick}/>
-        </li>
+        <Link to={`../performance/${student.id}`} 
+        className="group flex flex-row justify-between items-center p-2 border-black border-opacity-20 border-2 rounded-lg shadow-md" >
+                <p className="transition-all duration-1000 ease-in-out group-hover:underline">
+                    {student.first_name} {student.last_name}
+                </p>
+                <MdDelete onClick={handleDeleteStudentButtonClick}/>
+        </Link>
     );
 }
 

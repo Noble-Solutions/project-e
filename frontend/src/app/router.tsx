@@ -14,7 +14,7 @@ import { TaskCreateForm } from '../features/taskCreate';
 import { App } from './App';
 import { AddStudent, MainList, SingleClassroom } from '../features/singleClassroom';
 import { SingleVariant, TaskList, VariantResults } from '../features/singleVariant';
-
+import { SingleStudent } from '../features/singleClassroom';
 export const router = createBrowserRouter([
     {
         path: '/',
@@ -66,6 +66,7 @@ export const router = createBrowserRouter([
                                         path: 'main-widget',
                                         element: <MainList />
                                     },
+
                                 ]
 
                             }
@@ -106,6 +107,10 @@ export const router = createBrowserRouter([
                                     {
                                         path: 'add-student/',
                                         element: <AddStudent/>
+                                    },
+                                    {
+                                        path: 'performance/:student_id',
+                                        element: <SingleStudent/>
                                     },
                                 ]
 

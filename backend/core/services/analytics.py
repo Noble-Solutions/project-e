@@ -39,7 +39,7 @@ class AnalyticsService(BaseService):
         return {
             "task_stats": [
                 {
-                    TaskStatRead.model_validate(task),
+                    "task_stat": TaskStatRead.model_validate(task),
                 }
                 for task in task_stats
             ]

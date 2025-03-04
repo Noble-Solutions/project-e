@@ -1,7 +1,7 @@
 import { baseApi } from "../../../shared/api/api";
 import { clasroomWithStudentsAndTeacher } from "../../../shared/types/classrooms";
 import { studentRead } from "../../../shared/types/user";
-
+import { studentPerformanceResponse } from "./types";
 const singleClassroomApi = baseApi.injectEndpoints({
     endpoints: (build) => ({
         getClassroomByIdWithStudentsAndTeacher: build.query<clasroomWithStudentsAndTeacher, string | undefined>({
@@ -36,13 +36,21 @@ const singleClassroomApi = baseApi.injectEndpoints({
                 params: { classroom_id, student_id }
             }),
             invalidatesTags: ['Classrooms']
-        })
+        }),
+        getStudentPerformance: build.query<studentPerformanceResponse, {classroom_id: string | undefined, student_id: string | undefined}>({
+            query: ({ classroom_id, student_id }) => ({
+                url: `analytics/student/${student_id}/classroom/${classroom_id}`,
+                method: 'GET'
+            }),
+            transformResponse: (response: {task_stats: studentPerformanceResponse}) => response.task_stats
     })
+})
 })
 
 export const { 
     useGetClassroomByIdWithStudentsAndTeacherQuery, 
     useGetStudentByUsernameMutation, 
     useAddStudentToClassroomMutation,
-    useRemoveStudentFromClassroomMutation
+    useRemoveStudentFromClassroomMutation,
+    useGetStudentPerformanceQuery
 } = singleClassroomApi
