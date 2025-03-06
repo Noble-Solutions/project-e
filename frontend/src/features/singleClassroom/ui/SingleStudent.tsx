@@ -58,7 +58,13 @@ export const SingleStudent = () => {
     return (
         <div className="p-4">
             {isSuccess && (
-                <>
+                <div className="flex flex-col gap-5">
+                        <p className="text-2xl w-full text-center">
+                        {
+                            classroomData?.students.find((student) => student.id === student_id)?.first_name + ' ' + classroomData?.students.find((student) => student.id === student_id)?.last_name
+                        }
+                        </p>
+                    
                     {/* Таблица */}
                     <div className="overflow-x-auto mb-8">
                         <table className="min-w-full bg-white border border-gray-200">
@@ -116,7 +122,7 @@ export const SingleStudent = () => {
                             Чтобы увидеть статистику по лучшему и худшему заданию, у ученика должно быть решено 2 типа заданий больше 10 раз.
                         </div>
                     )}
-                </>
+                </div>
             )}
             {isError && (
                 <div className="flex justify-center items-center p-6">
