@@ -1,4 +1,4 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { createApi, fetchBaseQuery, BaseQueryFn, FetchArgs, FetchBaseQueryError } from '@reduxjs/toolkit/query/react'
 import { AppState } from '../store'
 
 /* 
@@ -11,19 +11,40 @@ import { AppState } from '../store'
 
 const API_URL : string = 'http://localhost:8000/api'
 
+const baseQuery = fetchBaseQuery({
+  baseUrl: API_URL,
+  credentials: 'include', // Включаем передачу cookies
+})
+
+const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> = async (
+  args,
+  api,
+  extraOptions
+) => {
+  let result = await baseQuery(args, api, extraOptions)
+
+  // Если запрос вернул 401 Unauthorized, обновляем токен
+  if (result.error && result.error.status === 401) {
+      const refreshResult = await baseQuery(
+          { url: '/auth/refresh', method: 'POST' },
+          api,
+          extraOptions
+      )
+
+      if (refreshResult.data) {
+          // Повторяем исходный запрос с новым токеном
+          result = await baseQuery(args, api, extraOptions)
+      } else {
+          // Если обновление токена не удалось, выходим
+          // Например, можно вызвать logout
+      }
+  }
+
+  return result
+}
+
 export const baseApi = createApi({
-    baseQuery: fetchBaseQuery({ 
-        baseUrl: API_URL,
-        credentials: 'include',
-        prepareHeaders: (headers, { getState }) => {
-            // By default, if we have a token in the store, let's use that for authenticated requests
-            const token = (getState() as AppState).auth.token
-            if (token) {
-              headers.set('authorization', `Bearer ${token}`)
-            }
-            return headers 
-          }
-        }),    
-    tagTypes: ['Classrooms', 'Tasks', 'Variants'],
-    endpoints: () => ({}),
+  baseQuery: baseQueryWithReauth,
+  tagTypes: ['Classrooms', 'Tasks', 'Variants'],
+  endpoints: () => ({}),
 })

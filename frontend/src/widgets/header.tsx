@@ -2,10 +2,11 @@ import { selectCurrentUser } from "../entities/user/model/user.slice";
 import { useAppSelector } from "../shared/store";
 import { Link, useParams } from "react-router-dom";
 import { VscAccount } from "react-icons/vsc";
-// TODO: добавить логаут в хедер
+import { useHandleLogout } from "../pages/auth/utils/logout";
 export const Header = () => {
     const params = useParams()
     const currentUser = useAppSelector(selectCurrentUser)
+    const { handleLogout } = useHandleLogout();
     console.log(JSON.stringify(params))
     return (
         <>
@@ -52,6 +53,7 @@ export const Header = () => {
                         </>
                         : 
                         <button
+                        onClick={handleLogout}
                         className="text-gray-800 dark:text-white bg-gray-100 ring-4ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800">
                             Выход
                         </button>

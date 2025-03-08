@@ -9,8 +9,10 @@ class AuthJWT(BaseModel):
     private_key_path: Path = BASE_DIR / "certs" / "jwt-private.pem"
     public_key_path: Path = BASE_DIR / "certs" / "jwt-public.pem"
     algorithm: str = "RS256"
-    access_token_expire_minutes: int = 45
-    refresh_token_expire_days: int = 30
+    access_token_expire_minutes: int = 1
+    refresh_token_expire_minutes: int = (
+        60 * 24 * 7
+    )  # Длительное время жизни refresh token
 
 
 class DatabaseSettings(BaseModel):
