@@ -1,10 +1,14 @@
+from fastapi import HTTPException
+from jwt import InvalidTokenError
 from sqlalchemy import select
 
+from config import settings
 from core.services.base_service import BaseService
 from core.utils.auth_utils import (
     hash_password,
     encode_jwt,
     validate_password,
+    decode_jwt,
 )
 from core.utils.exceptions import (
     user_already_exists_exc,
@@ -171,20 +175,30 @@ class AuthService(BaseService):
 
     async def login_user(self, username: str, password: str):
         """
-        Asynchronously logs in a user with the given username and password.
-
-        Args:
-            username (str): The username of the user.
-            password (str): The password of the user.
-
-        Returns:
-            dict: A dictionary containing the access token and token type.
-
-        Raises:
-            None.
+        Login a user and return access and refresh tokens.
         """
         user_schema = await self._validate_auth_credentials_of_user(username, password)
         access_token = encode_jwt(
             payload=user_schema,
+            expire_minutes=settings.auth_jwt.access_token_expire_minutes,
         )
-        return {"access_token": access_token, "token_type": "bearer"}
+        refresh_token = encode_jwt(
+            payload=user_schema,
+            expire_minutes=settings.auth_jwt.refresh_token_expire_minutes,
+        )
+        return {"access_token": access_token, "refresh_token": refresh_token}
+
+    async def refresh_access_token(self, refresh_token: str):
+        """
+        Refresh the access token using the refresh token.
+        """
+        try:
+            payload = decode_jwt(refresh_token)
+            user_schema = AccessTokenPayload.model_validate(payload)
+            new_access_token = encode_jwt(
+                payload=user_schema,
+                expire_minutes=settings.auth_jwt.access_token_expire_minutes,
+            )
+            return new_access_token
+        except InvalidTokenError:
+            raise HTTPException(status_code=401, detail="Invalid refresh token")
