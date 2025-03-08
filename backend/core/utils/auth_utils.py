@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from typing import List, Literal, Callable
 
 import bcrypt
-from fastapi import HTTPException, Depends
+from fastapi import HTTPException, Depends, Cookie
 from fastapi.security import OAuth2PasswordBearer
 from fastapi.encoders import jsonable_encoder
 from jwt import InvalidTokenError
@@ -15,8 +15,6 @@ from backend_types import RoleType
 from config import settings
 from core.utils.exceptions import forbidden_exc
 from core.schemas.user import AccessTokenPayload
-
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/login")
 
 
 def encode_jwt(
@@ -131,29 +129,17 @@ def validate_password(
 
 
 def get_current_token_payload(
-    token: str = Depends(oauth2_scheme),
+    access_token: str = Cookie(None),
 ) -> AccessTokenPayload:
     """
-    Retrieves the payload of the current token.
-
-    Args:
-        token (str, optional): The token to decode. Defaults to the value obtained from the `oauth2_scheme` dependency.
-
-    Returns:
-        dict: The decoded payload of the token.
-
-    Raises:
-        HTTPException: If the token is invalid or cannot be decoded.
+    Retrieves the payload of the current token from cookies.
     """
+    if not access_token:
+        raise HTTPException(status_code=401, detail="Access token is missing")
     try:
-        payload = decode_jwt(
-            token=token,
-        )
+        payload = decode_jwt(token=access_token)
     except InvalidTokenError as e:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail=f"invalid token error: {e}",
-        )
+        raise HTTPException(status_code=401, detail=f"Invalid token error: {e}")
     return payload
 
 
@@ -165,21 +151,34 @@ def _check_access_by_token(
 
     Args:
         roles (List[RoleType]): A list of roles that the user is expected to have.
-        token (str, optional): The token used for authentication. Defaults to the value obtained from the `oauth2_scheme` dependency.
-
-    Raises:
-        forbidden_exc: If the user does not have the required roles.
 
     Returns:
-        bool: True if the user has the required roles, False otherwise.
+        Callable: A dependency function that checks the user's roles.
+
+    Raises:
+        HTTPException: If the token is missing or invalid.
+        forbidden_exc: If the user does not have the required roles.
     """
 
-    def dependency(token: str = Depends(oauth2_scheme)):
-        payload = get_current_token_payload(token)
+    def dependency(access_token: str = Cookie(None)):
+        # Если токен отсутствует в cookies, выбрасываем исключение
+        if not access_token:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Access token is missing",
+            )
+
+        # Получаем payload из токена
+        payload = get_current_token_payload(access_token)
+
+        # Если roles == "any", возвращаем payload без проверки ролей
         if roles == "any":
             return payload
+
+        # Проверяем, есть ли у пользователя необходимая роль
         if payload.role_type not in roles:
             raise forbidden_exc
+
         return payload
 
     return dependency

@@ -5,13 +5,13 @@ from core.services.get_service import get_service
 from core.services.auth import AuthService
 from core.schemas.user import UserCreate, UserRead
 from fastapi.security import HTTPBearer
+from fastapi import Response, Cookie, HTTPException
 
 http_bearer = HTTPBearer(auto_error=False)
 
 router = APIRouter(
     prefix="/auth",
     tags=["auth"],
-    dependencies=[Depends(http_bearer)],
 )
 
 
@@ -39,37 +39,63 @@ async def register(
 
 @router.post("/login")
 async def login(
+    response: Response,
     auth_service: AuthService = Depends(get_service(AuthService)),
     username: str = Form(...),
     password: str = Form(...),
 ):
     """
-    Login a user.
-
-    Args:
-        auth_service (AuthService, optional): The authentication service dependency.
-        username (str): The username of the user.
-        password (str): The password of the user.
-    Returns:
-        dict: The user payload.
-    Raise:
-        HTTPException: If the user does not exist or the password is incorrect.
+    Login a user and set access and refresh tokens in cookies.
     """
-    return await auth_service.login_user(username, password)
+    tokens = await auth_service.login_user(username, password)
+    response.set_cookie(
+        key="access_token",
+        value=tokens["access_token"],
+        httponly=True,
+        secure=True,
+        samesite="lax",
+    )
+    response.set_cookie(
+        key="refresh_token",
+        value=tokens["refresh_token"],
+        httponly=True,
+        secure=True,
+        samesite="lax",
+    )
+    return {"message": "Logged in successfully"}
+
+
+@router.post("/refresh")
+async def refresh_token(
+    response: Response,
+    refresh_token: str = Cookie(None),
+    auth_service: AuthService = Depends(get_service(AuthService)),
+):
+    """
+    Refresh the access token using the refresh token.
+    """
+    if not refresh_token:
+        raise HTTPException(status_code=401, detail="Refresh token is missing")
+
+    new_access_token = await auth_service.refresh_access_token(refresh_token)
+    response.set_cookie(
+        key="access_token",
+        value=new_access_token,
+        httponly=True,
+        secure=True,
+        samesite="lax",
+    )
+    return {"access_token": new_access_token}
 
 
 @router.get("/me")
-async def get_current_user(user_schema: dict = Depends(get_current_token_payload)):
+async def get_current_user(
+    access_token: str = Cookie(None),
+    user_schema: dict = Depends(get_current_token_payload),
+):
     """
-    Get the current user's schema.
-
-    This endpoint retrieves the current user's schema by decoding the JWT token and
-    extracting the user's information. The user's schema is returned as a dictionary.
-
-    Returns:
-        dict: The user's schema.
-
-    Raises:
-        HTTPException: If the JWT token is invalid or cannot be decoded.
+    Get the current user's schema using the access token from cookies.
     """
+    if not access_token:
+        raise HTTPException(status_code=401, detail="Access token is missing")
     return user_schema
