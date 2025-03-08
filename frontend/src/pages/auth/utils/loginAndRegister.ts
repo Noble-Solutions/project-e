@@ -1,7 +1,7 @@
 import { FormEvent } from "react"
 import { extendedFormElements } from "../../../shared/types/extendedForm";
 import { useAppDispatсh } from "../../../shared/store"
-import { useLazyGetUserInfoQuery, useLoginMutation, useRegisterMutation,} from "../api/auth.api"
+import { useLazyGetUserInfoQuery, useLoginMutation, useRegisterMutation,} from "../api/api"
 import { setUser, setToken, setAuthError } from "../../../entities/user/model/user.slice"
 import { userCreate } from "../../../shared/types/user";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
