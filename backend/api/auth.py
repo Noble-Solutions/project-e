@@ -65,8 +65,32 @@ async def login(
     return {"message": "Logged in successfully"}
 
 
+@router.post("/logout")
+async def logout(response: Response):
+    """
+    Logout the user by deleting access and refresh tokens from cookies.
+    """
+    # Удаляем access_token
+    response.delete_cookie(
+        key="access_token",
+        httponly=True,
+        secure=True,
+        samesite="lax",
+    )
+
+    # Удаляем refresh_token
+    response.delete_cookie(
+        key="refresh_token",
+        httponly=True,
+        secure=True,
+        samesite="lax",
+    )
+
+    return {"message": "Logged out successfully"}
+
+
 @router.post("/refresh")
-async def refresh_token(
+async def refresh_access_token(
     response: Response,
     refresh_token: str = Cookie(None),
     auth_service: AuthService = Depends(get_service(AuthService)),
