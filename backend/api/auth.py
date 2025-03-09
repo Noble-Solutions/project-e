@@ -52,14 +52,14 @@ async def login(
         key="access_token",
         value=tokens["access_token"],
         httponly=True,
-        secure=True,
+        secure=False,  # TODO обязательно поменять на true когда перейду на htpps
         samesite="none",
     )
     response.set_cookie(
         key="refresh_token",
         value=tokens["refresh_token"],
         httponly=True,
-        secure=True,
+        secure=False,
         samesite="none",
     )
     return {"message": "Logged in successfully"}
@@ -74,7 +74,7 @@ async def logout(response: Response):
     response.delete_cookie(
         key="access_token",
         httponly=True,
-        secure=True,
+        secure=False,
         samesite="none",
     )
 
@@ -82,7 +82,7 @@ async def logout(response: Response):
     response.delete_cookie(
         key="refresh_token",
         httponly=True,
-        secure=True,
+        secure=False,
         samesite="none",
     )
 
@@ -106,7 +106,7 @@ async def refresh_access_token(
         key="access_token",
         value=new_access_token,
         httponly=True,
-        secure=True,
+        secure=False,
         samesite="none",
     )
     return {"access_token": new_access_token}
