@@ -33,5 +33,4 @@ COPY --from=build /fastapi_app .
 
 RUN pip install --no-cache-dir -r requirements.txt
 EXPOSE 8000
-
-CMD ["gunicorn", "-w", "4", "-k", "uvicorn.workers.UvicornWorker", "main:app"]
+CMD ["gunicorn", "main:app", "--workers=4", "--worker-class", "uvicorn.workers.UvicornWorker", "--bind=0.0.0.0:8000"]
