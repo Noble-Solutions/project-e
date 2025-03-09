@@ -69,3 +69,8 @@ dist-ssr
 .env
 .env.*
 certs/
+
+
+tsconfig.node.tsbuildinfo
+tsconfig.app.tsbuildinfo
+
