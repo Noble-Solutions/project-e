@@ -4,6 +4,7 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, Path
 from starlette import status
 
+from core.schemas.analytics import TaskStatCreate
 from core.schemas.response_models.variant import (
     GetVariantByIDWithTasksResponse,
     GetAllVariantsResponse,
@@ -11,9 +12,14 @@ from core.schemas.response_models.variant import (
 )
 from core.schemas.variant import VariantCreate, VariantRead
 from core.schemas.user import AccessTokenPayload
+from core.services.analytics import AnalyticsService
 from core.services.get_service import get_service
 from core.services.variants import VariantsService
-from core.utils.auth_utils import get_current_user, get_current_teacher
+from core.utils.auth_utils import (
+    get_current_user,
+    get_current_teacher,
+    get_current_student,
+)
 
 router = APIRouter(
     prefix="/variants",
@@ -180,24 +186,52 @@ async def remove_task_from_variant(
 )
 async def check_variant(
     variant_id: Annotated[UUID, Path],
+    classroom_id: UUID,
     task_id_to_answer: dict[UUID, str | int],
     variants_service: Annotated[
         "VariantsService",
         Depends(get_service(VariantsService)),
     ],
+    analytics_service: Annotated[
+        "AnalyticsService",
+        Depends(get_service(AnalyticsService)),
+    ],
+    student: Annotated[
+        "AccessTokenPayload",
+        Depends(get_current_student),
+    ],
 ):
-    return await variants_service.check_variant(
+    checked_variant = await variants_service.check_variant(
         variant_id=variant_id,
         task_id_to_answer=task_id_to_answer,
     )
 
+    for task_type, task_stats in checked_variant.get(
+        "task_stats_for_analytics"
+    ).items():
+        await analytics_service.add_task_result(
+            task_stat_create=TaskStatCreate(
+                student_id=student.id,
+                classroom_id=classroom_id,
+                task_type=task_type,
+                correct_solved=task_stats[0],
+                total_solved=task_stats[1],
+            )
+        )
+    return {
+        "maximum_points": checked_variant.get("maximum_points"),
+        "points_earned_by_student": checked_variant.get("points_earned_by_student"),
+    }
+
 
 @router.post(
-    "/assign_to_student/{variant_id}/{student_id}", status_code=status.HTTP_200_OK
+    "/assign_to_student/{variant_id}/{student_id}/{classroom_id}",
+    status_code=status.HTTP_200_OK,
 )
 async def assign_variant_to_student(
     variant_id: Annotated[UUID, Path],
     student_id: Annotated[UUID, Path],
+    classroom_id: Annotated[UUID, Path],
     teacher: Annotated[
         "AccessTokenPayload",
         Depends(get_current_teacher),
@@ -211,6 +245,7 @@ async def assign_variant_to_student(
         variant_id=variant_id,
         student_id=student_id,
         teacher_id=teacher.id,
+        classroom_id=classroom_id,
     )
 
     return {"status": "ok"}

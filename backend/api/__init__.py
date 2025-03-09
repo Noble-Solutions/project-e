@@ -6,6 +6,7 @@ from .variants import router as variants_router
 from .classrooms import router as classrooms_router
 
 from .tasks import router as tasks_router
+from .analytics import router as analytics_router
 
 router = APIRouter(prefix="/api")
 router.include_router(auth_router)
@@ -13,3 +14,4 @@ router.include_router(tests_router)
 router.include_router(variants_router)
 router.include_router(classrooms_router)
 router.include_router(tasks_router)
+router.include_router(analytics_router)

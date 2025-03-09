@@ -11,6 +11,7 @@ const classroomsApi = baseApi.injectEndpoints({
             providesTags: ['Variants'],
             transformResponse: (response: {variants: VariantRead[]}) => response.variants
         }),
+        // TODO: добавить classroom_id в этот реквест тоже
         assignVariantToStudent: build.mutation<void, {variant_id: string, student_id: string}>({
             query: ({variant_id, student_id}) => ({
                 url: `variants/assign_variant_to_student/${variant_id}/${student_id}`,

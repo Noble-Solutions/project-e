@@ -2,31 +2,38 @@ import { useNavigate, useParams } from "react-router-dom";
 import type { TaskRead } from "../../../entities/task";
 import { useGetPresignedUrlForGetFromS3Query } from "../api/api";
 import { useAddTaskToVariantMutation } from "../../variant/api/api";
+
 export const Card = (props: TaskRead) => {
-    const { variant_id } = useParams()
-    const navigate = useNavigate()
-    const [addTaskToVariant] = useAddTaskToVariantMutation()
-    const { 
-        data: presignedUrlData
-    } = useGetPresignedUrlForGetFromS3Query(
-        `${props.file_id}.${props.file_extension}`, 
-        {skip: !props.file_id})
-    
+    const { variant_id } = useParams();
+    const navigate = useNavigate();
+    const [addTaskToVariant] = useAddTaskToVariantMutation();
+
+    // Запрос для получения URL картинки
+    const { data: presignedUrlData } = useGetPresignedUrlForGetFromS3Query(
+        `${props.file_id}.${props.file_extension}`,
+        { skip: !props.file_id } // Пропускаем запрос, если file_id отсутствует
+    );
+
+    // Обработчик клика по карточке
     const handleCardClick = () => {
         if (!variant_id) {
-            return
+            return;
         }
-        addTaskToVariant({variant_id, task_id: props.id})
-        navigate(`../../variants/single/${variant_id}/main-widget`)
-    }
+        addTaskToVariant({ variant_id, task_id: props.id });
+        navigate(`../../variants/single/${variant_id}/main-widget`);
+    };
 
+    // Заглушка для картинки
+    const placeholderImage = "https://dummyimage.com/300x200/cccccc/ffffff&text=No+Image";
+    console.log(`presign url data: ${presignedUrlData}`);
     return (
-        <div 
-        onClick={handleCardClick}
-        className="max-w-sm rounded-lg overflow-hidden shadow-lg bg-white dark:bg-gray-800 transition-all duration-300 hover:shadow-xl">
+        <div
+            onClick={handleCardClick}
+            className="max-w-sm rounded-lg overflow-hidden shadow-lg bg-white dark:bg-gray-800 transition-all duration-300 hover:shadow-xl cursor-pointer"
+        >
             {/* Image Section */}
             <img
-                src={presignedUrlData}
+                src={presignedUrlData || placeholderImage} // Используем заглушку, если presignedUrlData отсутствует
                 alt="Card Image"
                 className="w-full h-48 object-cover"
             />
@@ -52,4 +59,4 @@ export const Card = (props: TaskRead) => {
             </div>
         </div>
     );
-}
+};

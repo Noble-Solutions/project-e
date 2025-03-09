@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from sqlalchemy import ForeignKey, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -13,9 +15,9 @@ class StudentVariantAssociation(UUIDIdPkMixin, Base):
             name="idx_unique_student_variant",
         ),
     )
-
-    student_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
-    variant_id: Mapped[int] = mapped_column(
+    classroom_id: Mapped[UUID]
+    student_id: Mapped[UUID] = mapped_column(ForeignKey("users.id"))
+    variant_id: Mapped[UUID] = mapped_column(
         ForeignKey(
             "variants.id",
             ondelete="CASCADE",

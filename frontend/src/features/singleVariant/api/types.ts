@@ -9,7 +9,9 @@ type VariantRead = {
 }
 
 export type getVariantByIdWithTasksResponse = {
-    variant_data: VariantRead
+    variant_data: VariantRead & {
+        classroom_id?: string
+    }
     tasks: TaskRead[]
 }
 
