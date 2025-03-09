@@ -1,10 +1,10 @@
 import { Card } from "./Card"
 import { useGetAllVariantsOfUserQuery } from "../api/api"
 import BackendError from "../../../shared/ui/BackendError"
-import { Link, useSearchParams } from "react-router-dom"
+import { Link,  } from "react-router-dom"
 import { useAppSelector } from "../../../shared/store"
 import { selectCurrentUser } from "../../../entities/user/model/user.slice"
-import { useAssignVariantToClassroomMutation, useAssignVariantToStudentMutation } from "../api/api"
+
 export const List = () => {
     const { 
       data: variantsData, 

@@ -1,5 +1,5 @@
 import { baseApi } from "../../../shared/api/api";
-import { VariantList, VariantRead } from "./types";
+import { VariantRead } from "./types";
 
 const classroomsApi = baseApi.injectEndpoints({
     endpoints: (build) => ({

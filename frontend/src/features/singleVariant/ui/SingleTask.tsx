@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { TaskRead } from "../../../entities/task"
 import { useGetPresignedUrlForGetFromS3Query } from "../../../entities/task/api/api";
 

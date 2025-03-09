@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+  # Фронтенд
+  frontend:
+    build: 
+      context: ./frontend
+      target: prod
+    container_name: project_e_frontend_prod
+    ports:
+      - '80:3000'
+    env_file:
+      - ./frontend/.env.prod
+    networks:
+      - custom
+    
+  #админ панель нашего приложения
+  admin_panel:
+    build: ./adminka
+    volumes:
+      - ./adminka:/app
+      - /app/.venv
+    environment:
+      - PYTHONDONTWRITEBYTECODE=1
+      - PYTHONUNBUFFERED=1
+    depends_on:
+      - db
+    ports:
+      - "6786:6786"
+    networks:
+      - custom
+
+  # Основная апишка нашего приложения
+  backend:
+    build: 
+      context: ./backend
+      target: prod
+    container_name: project_e_backend_prod
+    # command: gunicorn -w 4 -k uvicorn.workers.UvicornWorker main:app
+    ports:
+      - '8000:8000'
+    env_file:
+      - ./backend/.env
+    depends_on:
+      - db
+    networks:
+      - custom
+
+  # База данных для продакшена
+  db:
+    image: postgres
+    container_name: project_e_db_prod
+    environment:
+      POSTGRES_DB: project_e
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+    ports:
+      - '5432:5432'
+    networks:
+      - custom
+
+networks:
+  custom:
+    driver: bridge
