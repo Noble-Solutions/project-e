@@ -8,7 +8,9 @@ import { createApi, fetchBaseQuery, BaseQueryFn, FetchArgs, FetchBaseQueryError 
 
 // Если вы хотите получить API_URL из переменных окружения
 const API_URL : string = import.meta.env.VITE_API_URL
-
+console.log(`mode ${import.meta.env.MODE}`)
+console.log(`API_URL ${API_URL}`)
+console.log(`PROD: ${import.meta.env.PROD}`)
 // const API_URL : string = 'http://localhost:8000/api'
 
 const baseQuery = fetchBaseQuery({
