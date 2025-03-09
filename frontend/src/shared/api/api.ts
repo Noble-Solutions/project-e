@@ -7,9 +7,9 @@ import { createApi, fetchBaseQuery, BaseQueryFn, FetchArgs, FetchBaseQueryError 
 // import * as _rtkQueryBuildHooksTypes from "../../../node_modules/@reduxjs/toolkit/dist/query/react/buildHooks"
 
 // Если вы хотите получить API_URL из переменных окружения
-// const API_URL : string = import.meta.env.VITE_API_URL
+const API_URL : string = import.meta.env.VITE_API_URL
 
-const API_URL : string = 'http://localhost:8000/api'
+// const API_URL : string = 'http://localhost:8000/api'
 
 const baseQuery = fetchBaseQuery({
   baseUrl: API_URL,
