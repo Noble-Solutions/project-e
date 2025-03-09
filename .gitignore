@@ -67,4 +67,5 @@ dist-ssr
 *.sw?
 
 .env
+.env.*
 certs/

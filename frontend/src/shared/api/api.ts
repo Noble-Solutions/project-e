@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery, BaseQueryFn, FetchArgs, FetchBaseQueryError } from '@reduxjs/toolkit/query/react'
-import { AppState } from '../store'
+
 
 /* 
 ФИКС ЕСЛИ НЕ ТИПИЗИРУЮТСЯ АВТОМАТИЧЕСКИ СГЕНЕРИРОВАННЫЕ ХУКИ RTK QUERY

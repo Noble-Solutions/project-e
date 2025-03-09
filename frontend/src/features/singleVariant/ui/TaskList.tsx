@@ -9,7 +9,6 @@ import { useAppSelector } from "../../../shared/store"
 import { selectCurrentUser } from "../../../entities/user/model/user.slice"
 import { useAppDispatсh } from "../../../shared/store"
 import { selectVariantAnswers, selectAnswerToTask, addAnswerToTask } from "../model/slice"
-import { useGetPresignedUrlForGetFromS3Query } from "../../../entities/task/api/api"
 import { SingleTask } from "./SingleTask"
 export const TaskList = () => {
     const { id } = useParams<{id: string}>()
