@@ -40,7 +40,9 @@ export const Auth = () => {
                         <SuccessAlert mainText={'Регистрация выполнена'}/>
                         <div
                         className="w-full text-center hover:cursor-pointer" 
-                        onClick={() => navigate('auth/login')}>
+                        onClick={() => {
+                            navigate('/')
+                        }}>
                             Перейти ко входу
                             </div>
                     </div>
