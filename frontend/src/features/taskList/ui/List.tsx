@@ -25,7 +25,17 @@ export const List = () => {
         </div>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {/* Responsive grid */}
-          {isTasksListDataError && <BackendError error={tasksListDataError} />}
+          {isTasksListDataError &&  
+            <div className="flex justify-center items-center p-6">
+                    <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
+                        <strong className="font-bold">Ошибка!</strong>
+                        <span className="block sm:inline">
+                            {' '}
+                            Что-то пошло не так. Пожалуйста, попробуйте еще раз.
+                        </span>
+                    </div>
+            </div>
+            }
           {isTasksListDataSuccess &&
             tasksListData.map((task) => (
               <TaskCard key={task.id} {...task} />
