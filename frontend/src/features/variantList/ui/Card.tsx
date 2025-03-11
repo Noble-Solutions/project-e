@@ -48,7 +48,7 @@ export const Card = ({
       <a href="#">
         <h5 className="mb-3 text-xl md:text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
           {mainHeader}
-        </h5> {/* Reduced mb, added md:text-2xl for larger screens*/}
+        </h5> {/*Reduced mb, added md:text-2xl for larger screens*/}
       </a>
       <div className="flex flex-col sm:flex-row gap-2 sm:gap-4"> {/* Made the info flex on larger screens, added gap */}
         <p className="font-normal text-gray-700 dark:text-gray-400">
