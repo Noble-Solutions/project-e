@@ -10,7 +10,6 @@ export const List = () => {
         isError: isTasksListDataError
     } = useGetAllTasksOfTeacherQuery()
     return (
-        // TODO отстилизовать кнопку создать задание
         <div>
             <Link
             to="../create"

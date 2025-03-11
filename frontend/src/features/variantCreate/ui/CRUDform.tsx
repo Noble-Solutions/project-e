@@ -67,7 +67,7 @@ export const CRUDForm = () => {
                   disabled={isLoading}
                   className="w-full text-white bg-blue-600 hover:bg-blue-700 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 px-5 py-2.5 text-center disabled:bg-blue-400" // Added disabled styles
                 >
-                  {isLoading ? 'Создание...' : 'Создать вариант'} {/* Dynamic text */}
+                  {isLoading ? 'Создание...' : 'Создать вариант'} {/* Dynamic text*/}
                 </button>
               </form>
             </div>

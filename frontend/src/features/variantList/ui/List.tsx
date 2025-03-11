@@ -17,7 +17,7 @@ export const List = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      {/* Use conner for responsiveness */}
+      {/* Use for responsiveness */}
       <div className="flex flex-col gap-6">
         {/* Increased gap */}
         {user?.role_type === "teacher" && (
