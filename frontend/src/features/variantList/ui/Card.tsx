@@ -54,12 +54,12 @@ export const Card = ({
         <p className="font-normal text-gray-700 dark:text-gray-400">
           Кол-во заданий: {taskAmount}
         </p>
-        {subject && ( // Only render if subject is available
+        {subject && (
           <p className="font-normal text-gray-700 dark:text-gray-400">
             {subject}
           </p>
         )}
-        {teacher_name && ( // Only render if teacher_name is available
+        {teacher_name && (
             <p className="font-normal text-gray-700 dark:text-gray-400">
              {teacher_name}
             </p>
