@@ -21,7 +21,7 @@ export const List = () => {
       <div className="flex flex-col gap-6">
         {/* Increased gap */}
         {user?.role_type === "teacher" && (
-          <div className="w-full flex justify-center"> {/* Center the button */}
+          <div className="w-full flex justify-center"> {/* Center the */}
             <Link
               to="../create"
               relative="path"
