@@ -3,17 +3,17 @@ import { useGetAllTasksOfTeacherQuery } from "../api/api"
 import { TaskCard } from "../../../entities/task"
 import BackendError from "../../../shared/ui/BackendError"
 export const List = () => {
-    const { 
-        data: tasksListData, 
-        isSuccess: isTasksListDataSuccess, 
-        error: tasksListDataError, 
-        isError: isTasksListDataError 
+    const {
+        data: tasksListData,
+        isSuccess: isTasksListDataSuccess,
+        error: tasksListDataError,
+        isError: isTasksListDataError
     } = useGetAllTasksOfTeacherQuery()
     return (
         // TODO отстилизовать кнопку создать задание
         <div>
             <Link
-            to="../create" 
+            to="../create"
             relative="path"
             >
                 Создать задание
