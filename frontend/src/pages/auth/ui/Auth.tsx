@@ -26,7 +26,7 @@ export const Auth = () => {
     dispatch(setAuthError(null));
   }, []);
   return (
-    <section className="bg-gray-50 dark:bg-gray-900 relative">
+    <section className="bg-white relative"> {/* Changed the background to white */}
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
         {isLoginSuccess && (
           <div className="flex gap-3 flex-col">
@@ -57,9 +57,9 @@ export const Auth = () => {
           </div>
         )}
         {!isLoginSuccess && !isRegisterSuccess && (
-          <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700 relative"> {/* Added relative position */}
+          <div className="w-full bg-white rounded-lg shadow md:mt-0 sm:max-w-md xl:p-0 relative"> {/* Removed dark classes*/}
             <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-              <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+              <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl"> {/* Removed dark classes*/}
                 {authType === "login" ? "Вход в аккаунт" : "Регистрация"}
               </h1>
 
@@ -70,7 +70,7 @@ export const Auth = () => {
                 }
               >
                 <div>
-                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                  <label className="block mb-2 text-sm font-medium text-gray-900"> {/* Removed dark classes*/}
                     Ваш логин
                   </label>
                   <input
@@ -78,13 +78,13 @@ export const Auth = () => {
                     type="text"
                     name="email"
                     id="email"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 " // Removed dark mode classes
+                    className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
                     placeholder="user123"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                  <label className="block mb-2 text-sm font-medium text-gray-900"> {/* Removed dark classes*/}
                     Ваш пароль
                   </label>
                   <input
@@ -93,14 +93,14 @@ export const Auth = () => {
                     name="password"
                     id="password"
                     placeholder="••••••••"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" // Removed dark mode classes
+                    className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                     required
                   />
                 </div>
                 {authType === "register" && (
                   <>
                     <div>
-                      <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                      <label className="block mb-2 text-sm font-medium text-gray-900"> {/* Removed dark classes*/}
                         Ваше имя
                       </label>
                       <input
@@ -108,13 +108,13 @@ export const Auth = () => {
                         type="text"
                         name="first_name"
                         id="first_name"
-                        className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" // Removed dark mode classes
+                        className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                         placeholder="Иван"
                         required
                       />
                     </div>
                     <div>
-                      <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                      <label className="block mb-2 text-sm font-medium text-gray-900"> {/* Removed dark classes*/}
                         Ваша фамилия
                       </label>
                       <input
@@ -122,13 +122,13 @@ export const Auth = () => {
                         type="text"
                         name="last_name"
                         id="last_name"
-                        className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" // Removed dark mode classes
+                        className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                         placeholder="Иванов"
                         required
                       />
                     </div>
                     <div>
-                      <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                      <label className="block mb-2 text-sm font-medium text-gray-900"> {/* Removed dark classes*/}
                         Выберите вашу роль
                       </label>
                       <select
@@ -136,7 +136,7 @@ export const Auth = () => {
                           setChosenRole(e.target.value)
                         }
                         value={chosenRole}
-                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" // Removed dark mode classes
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                       >
                         <option value="teacher">Учитель</option>
                         <option value="student">Ученик</option>
@@ -144,10 +144,10 @@ export const Auth = () => {
                     </div>
                     {chosenRole === "teacher" && (
                       <div>
-                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                        <label className="block mb-2 text-sm font-medium text-gray-900"> {/* Removed dark classes*/}
                           Выберите ваш предмет
                         </label>
-                        <select className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"> {/* Removed dark mode classes */}
+                        <select className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                           <option value="informatics">Информатика</option>
                           <option value="math">Математика</option>
                           <option value="russian">Русский язык</option>
@@ -168,17 +168,17 @@ export const Auth = () => {
                 )}
                 <button
                   type="submit"
-                  className="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center" // Removed dark mode classes and change primary to blue
+                  className="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                 >
                   {authType === "login" ? "Войти" : "Зарегистрироваться"}
                 </button>
-                <div className="text-sm font-light text-gray-500 dark:text-gray-400 flex flex-row gap-2">
+                <div className="text-sm font-light text-gray-500 flex flex-row gap-2"> {/* Removed dark classes*/}
                   {authType === "login"
                     ? "Еще нет аккаунта? "
                     : "Уже есть аккаунт? "}
                   <a
                     href="#"
-                    className="font-medium text-blue-600 hover:underline" // Removed dark mode classes and change primary to blue
+                    className="font-medium text-blue-600 hover:underline"
                     onClick={() =>
                       navigate(
                         `/auth/${
