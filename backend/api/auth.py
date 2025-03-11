@@ -53,14 +53,14 @@ async def login(
         value=tokens["access_token"],
         httponly=True,
         secure=True,
-        samesite="lax",
+        samesite="none",
     )
     response.set_cookie(
         key="refresh_token",
         value=tokens["refresh_token"],
         httponly=True,
         secure=True,
-        samesite="lax",
+        samesite="none",
     )
     return {"message": "Logged in successfully"}
 
@@ -75,7 +75,7 @@ async def logout(response: Response):
         key="access_token",
         httponly=True,
         secure=True,
-        samesite="lax",
+        samesite="none",
     )
 
     # Удаляем refresh_token
@@ -83,7 +83,7 @@ async def logout(response: Response):
         key="refresh_token",
         httponly=True,
         secure=True,
-        samesite="lax",
+        samesite="none",
     )
 
     return {"message": "Logged out successfully"}
@@ -107,9 +107,12 @@ async def refresh_access_token(
         value=new_access_token,
         httponly=True,
         secure=True,
-        samesite="lax",
+        samesite="none",
     )
     return {"access_token": new_access_token}
+
+
+#
 
 
 @router.get("/me")
