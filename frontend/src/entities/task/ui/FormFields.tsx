@@ -15,7 +15,7 @@ export const FormFields = () => {
 
   return (
     <div className="flex flex-col gap-4">
-      {/* Added gap-4 */}
+      {/* gap-4 */}
       <div className="w-full">
         <label
           htmlFor="type"
