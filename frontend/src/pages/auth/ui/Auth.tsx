@@ -6,7 +6,6 @@ import { useHandleLoginAndRegister } from "../utils/loginAndRegister"
 
 import { setAuthError, selectAuthError, selectCurrentUser } from "../../../entities/user/model/user.slice";
 
-import BackendError from "../../../shared/ui/BackendError";
 import { SuccessAlert } from "../../../shared/ui/Alerts";
 import { extendedFormElements } from "../../../shared/types/extendedForm";
 import { useAppDispatсh, useAppSelector } from "../../../shared/store";
@@ -41,7 +40,9 @@ export const Auth = () => {
                         <SuccessAlert mainText={'Регистрация выполнена'}/>
                         <div
                         className="w-full text-center hover:cursor-pointer" 
-                        onClick={() => navigate('/login')}>
+                        onClick={() => {
+                            navigate('/')
+                        }}>
                             Перейти ко входу
                             </div>
                     </div>
@@ -148,7 +149,7 @@ export const Auth = () => {
                     </div>
                 </div>
                 }
-                {authError && <BackendError error={authError} />}
+                {authError && <p>Error</p>}
             </div>
         </section>
     )
