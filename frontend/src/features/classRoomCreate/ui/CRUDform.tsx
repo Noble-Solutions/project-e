@@ -7,11 +7,11 @@ export const CRUDForm = () => {
     const navigate = useNavigate()
     const { handleCreateClassroom, isCreateCLassroomSuccess } = useHandleCreateClassroom()
     return (
-        <section className="bg-gray-50 dark:bg-gray-900 relative">
+        <section className="bg-white dark:bg-gray-900 relative">
             <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
                     {
                     isCreateCLassroomSuccess &&
-                    <div className="flex gap-3 flex-col">
+                    <div className="flex gap-3 flex-col bg-white">
                         <SuccessAlert mainText={'Класс успешно создан'}/>
                         <div 
                         className="w-full text-center hover:cursor-pointer"

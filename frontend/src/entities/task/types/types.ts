@@ -10,5 +10,7 @@ export type TaskRead = TaskCreate & {
     id: string,
     file_id: string,
     file_extension: string,
+    additional_file_id: string,
+    additional_file_extension: string,
     teacher_id: string,
 }

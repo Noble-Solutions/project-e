@@ -9,8 +9,15 @@ const taskApi = baseApi.injectEndpoints({
                 params: { full_file_name: arg }
             }),
             
-        }) 
+        }),
+        deleteTask: build.mutation<void, {task_id: string}>({
+            query: ({task_id}) => ({
+                url: `/tasks/${task_id}`,
+                method: 'DELETE',
+            }),
+            invalidatesTags: ['Tasks']
+        })
     })
 })
 
-export const { useGetPresignedUrlForGetFromS3Query } = taskApi
+export const { useGetPresignedUrlForGetFromS3Query, useDeleteTaskMutation } = taskApi
