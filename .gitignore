@@ -74,3 +74,4 @@ certs/
 tsconfig.node.tsbuildinfo
 tsconfig.app.tsbuildinfo
 
+nginx/certs
