@@ -24,7 +24,7 @@ services:
     volumes:
       - ./nginx/server.conf:/etc/nginx/conf.d/default.conf
       - ./nginx/certs:/etc/nginx/certs
-      - ./frontend/dist:/var/www/project_e/dist
+      - frontend_dist:/var/www/project_e/dist
     depends_on:
       - frontend
       - backend
@@ -47,15 +47,14 @@ services:
     networks:
       - custom
 
-  # Основная апишка нашего приложения
+  # Бэкенд
   backend:
     build: 
       context: ./backend
       target: prod
     container_name: project_e_backend_prod
-    # command: gunicorn -w 4 -k uvicorn.workers.UvicornWorker main:app
     ports:
-      - '8000:8000'
+      - "8000:8000"
     env_file:
       - ./backend/.env
     depends_on:
@@ -63,7 +62,7 @@ services:
     networks:
       - custom
 
-  # База данных для продакшена
+  # База данных
   db:
     image: postgres
     container_name: project_e_db_prod
@@ -72,7 +71,7 @@ services:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
     ports:
-      - '5432:5432'
+      - "5432:5432"
     networks:
       - custom
 

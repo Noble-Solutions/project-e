@@ -1,4 +1,3 @@
-import React from "react";
 import { useGetPresignedUrlForGetFromS3Query } from "../../../entities/task/api/api";
 import { TaskRead } from "../../../entities/task";
 import { FaFileDownload } from "react-icons/fa"; // Импортируем иконку файла
