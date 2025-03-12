@@ -3,6 +3,7 @@ import { useAppSelector } from "../shared/store";
 import { Link, useParams } from "react-router-dom";
 import { VscAccount } from "react-icons/vsc";
 import { useHandleLogout } from "../pages/auth/utils/logout";
+import { FaTelegram } from "react-icons/fa6";
 export const Header = () => {
     const params = useParams()
     const currentUser = useAppSelector(selectCurrentUser)
@@ -13,6 +14,9 @@ export const Header = () => {
         <header className="shadow">
             <nav className="bg-white border-gray-200 lg:w-[84%] mx-auto py-2.5 dark:bg-gray-800">
                 <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
+                    <a href="https://web.telegram.org/k/#@project_help24983_bot" target="_blank" rel="noreferrer" className="flex items-center">
+                        <FaTelegram className="text-3xl"/>
+                    </a>
                     <div className="flex items-center gap-3">
                         <VscAccount className="text-3xl"/>
                         <span>

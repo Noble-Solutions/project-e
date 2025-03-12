@@ -4,6 +4,7 @@ from aiogram.filters import Command
 import asyncio
 import os
 from dotenv import load_dotenv
+
 load_dotenv()
 
 TOKEN = os.getenv("BOT_TOKEN")
@@ -11,7 +12,6 @@ ADMIN_ID = int(os.getenv("ADMIN_ID"))
 
 bot = Bot(token=TOKEN)
 dp = Dispatcher()
-
 
 kb = ReplyKeyboardMarkup(
     keyboard=[
@@ -65,4 +65,5 @@ async def main():
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(main())
