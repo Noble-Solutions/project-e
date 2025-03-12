@@ -4,7 +4,7 @@ import { extendedFormElements } from "../../../shared/types/extendedForm"
 
 
 export const useHandleCreateVariant = () => {
-    const [createVariant, { isSuccess: isCreateVariantSuccess }] = useCreateVariantMutation()
+    const [createVariant, { isSuccess: isCreateVariantSuccess, isLoading: isLoadingVariant }] = useCreateVariantMutation()
     const handleCreateVariant = async (e: FormEvent<extendedFormElements>): Promise<void> => {
         e.preventDefault()
         const { elements } = e.currentTarget
@@ -27,5 +27,5 @@ export const useHandleCreateVariant = () => {
                 }
             }
         }
-        return { handleCreateVariant, isCreateVariantSuccess }
+        return { handleCreateVariant, isCreateVariantSuccess, isLoadingVariant }
     }

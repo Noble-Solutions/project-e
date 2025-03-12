@@ -1,5 +1,7 @@
 from fastapi import APIRouter, Depends, Form
+from sqlalchemy import select
 
+from core.models import User
 from core.utils.auth_utils import get_current_token_payload
 from core.services.get_service import get_service
 from core.services.auth import AuthService
@@ -119,10 +121,11 @@ async def refresh_access_token(
 async def get_current_user(
     access_token: str = Cookie(None),
     user_schema: dict = Depends(get_current_token_payload),
+    auth_service: AuthService = Depends(get_service(AuthService)),
 ):
     """
     Get the current user's schema using the access token from cookies.
     """
     if not access_token:
         raise HTTPException(status_code=401, detail="Access token is missing")
-    return user_schema
+    return await auth_service.get_user_by_id(dict(user_schema)["id"])

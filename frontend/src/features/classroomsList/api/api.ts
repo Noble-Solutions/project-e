@@ -9,8 +9,15 @@ const classroomsApi = baseApi.injectEndpoints({
                 method: 'GET'
             }),
             providesTags: ['Classrooms']
+        }),
+        deleteClassroom: build.mutation<void, {classroom_id: string}>({
+            query: ({classroom_id}) => ({
+                url: `/classrooms/${classroom_id}`,
+                method: 'DELETE',
+            }),
+            invalidatesTags: ['Classrooms']
         })
     })
 })
 
-export const { useGetAllClassroomsOfUserQuery } = classroomsApi
+export const { useGetAllClassroomsOfUserQuery, useDeleteClassroomMutation } = classroomsApi

@@ -33,6 +33,8 @@ class Task(
     points_per_task: Mapped[int]
     file_id: Mapped[Optional[UUID]]
     file_extension: Mapped[Optional[str]]
+    additional_file_id: Mapped[Optional[UUID]]
+    additional_file_extension: Mapped[Optional[str]]
     type_of_answer: Mapped[AnswerType]
     correct_answer: Mapped[Optional[str]]
 

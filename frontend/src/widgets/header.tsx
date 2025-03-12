@@ -17,7 +17,7 @@ export const Header = () => {
                         <VscAccount className="text-3xl"/>
                         <span>
                             {
-                                currentUser ? currentUser.username : 'Гость'
+                                currentUser ? `${currentUser.last_name} ${currentUser.first_name[0]}.` : 'Гость'
                             }
                         </span>
                     </div>
@@ -29,18 +29,20 @@ export const Header = () => {
                                     Варианты
                                 </Link>
                             </div>
-                            <div className="flex items-center justify-center">
-                                <Link to={`/${currentUser?.role_type}/classes/list`}>
-                                    Классы
-                                </Link>
-                            </div>
                             {
                             currentUser.role_type === 'teacher' &&
-                            <div className="flex items-center justify-center">
-                                <Link to={`/teacher/tasks/list`}>
-                                    Задания
-                                </Link>
-                            </div>
+                            <>
+                                <div className="flex items-center justify-center">
+                                    <Link to={`/${currentUser?.role_type}/classes/list`}>
+                                        Классы
+                                    </Link>
+                                </div>
+                                <div className="flex items-center justify-center">
+                                    <Link to={`/teacher/tasks/list`}>
+                                        Задания
+                                    </Link>
+                                </div>
+                            </>
                             }
                         </>
                     }

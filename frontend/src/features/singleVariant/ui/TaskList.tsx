@@ -81,11 +81,15 @@ export const TaskList = () => {
                 {/* Left Section */}
                 <div className="flex flex-col text-2xl justify-start items-center md:w-1/10">
                     {variant.tasks.map((task) => (
-                        <div 
-                        key={task.id} 
+                        <div
+                        key={task.id}
                         onClick={() => navigate(`../main-widget/${task.id}`)}
-                        className=" pt-2 border-b-2 solid border-black w-full hover:bg-gray-200 hover:cursor-pointer px-4">
-                            <p className="text-center">{task.type}</p>
+                        className={`
+                            pt-2 border-b-2 solid border-black w-full hover:bg-gray-200 hover:cursor-pointer px-4
+                            ${task.id === task_id ? "bg-blue-200" : ""} // Добавляем выделение фона
+                        `}
+                        >
+                        <p className="text-center">{task.type}</p>
                         </div>
                     ))}
                 </div>

@@ -1,7 +1,8 @@
 import { useNavigate, useParams } from "react-router-dom";
 import type { TaskRead } from "../../../entities/task";
-import { useGetPresignedUrlForGetFromS3Query } from "../api/api";
+import { useDeleteTaskMutation, useGetPresignedUrlForGetFromS3Query } from "../api/api";
 import { useAddTaskToVariantMutation } from "../../variant/api/api";
+import { FaTrash } from "react-icons/fa";
 
 export const Card = (props: TaskRead) => {
     const { variant_id } = useParams();
@@ -14,6 +15,7 @@ export const Card = (props: TaskRead) => {
         { skip: !props.file_id } // Пропускаем запрос, если file_id отсутствует
     );
 
+    const [deleteTask] = useDeleteTaskMutation();
     // Обработчик клика по карточке
     const handleCardClick = () => {
         if (!variant_id) {
@@ -38,8 +40,20 @@ export const Card = (props: TaskRead) => {
                 className="w-full h-48 object-cover"
             />
 
+           
+
             {/* Content Section */}
-            <div className="px-6 py-4">
+            <div className="px-6 py-4 relative">
+                 {/* Иконка удаления */}
+                 <div
+                className="absolute bottom-2 right-2 p-2 text-gray-500 hover:text-red-500 cursor-pointer transition-colors duration-200"
+                onClick={async (e) => {
+                    e.stopPropagation(); // Останавливаем всплытие события, чтобы не срабатывал handleCardClick
+                    await deleteTask({task_id: props.id});
+                }}
+                >
+                    <FaTrash className="w-5 h-5" />
+                </div>
                 {/* Type */}
                 <p className="text-gray-700 dark:text-gray-300 text-sm font-semibold mb-2">
                     {props.type}

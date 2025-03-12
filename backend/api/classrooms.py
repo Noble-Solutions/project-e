@@ -1,6 +1,6 @@
 from uuid import UUID
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Path
 from typing import Annotated
 
 from sqlalchemy import select
@@ -133,9 +133,9 @@ async def update_classroom(
     )
 
 
-@router.delete("/delete_classroom", status_code=status.HTTP_200_OK)
+@router.delete("/{classroom_id}", status_code=status.HTTP_200_OK)
 async def delete_classroom(
-    classroom_id: UUID,
+    classroom_id: Annotated[UUID, Path],
     teacher: Annotated[
         "AccessTokenPayload",
         Depends(get_current_teacher),

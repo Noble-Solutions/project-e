@@ -33,6 +33,7 @@ class TasksService(BaseService):
         task_create: TaskCreate,
         teacher_id: UUID,
         file_extension: Optional[str],
+        additional_file_extension: Optional[str],
     ) -> TaskRead:
         """
         Asynchronously creates a new task in the database.
@@ -57,6 +58,9 @@ class TasksService(BaseService):
         if file_extension:
             task.file_extension = file_extension
             task.file_id = uuid4()
+        if additional_file_extension:
+            task.additional_file_extension = additional_file_extension
+            task.additional_file_id = uuid4()
         self.db.add(task)
         await self.db.commit()
         return TaskRead.model_validate(task)
