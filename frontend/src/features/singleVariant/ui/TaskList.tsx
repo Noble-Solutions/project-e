@@ -2,7 +2,7 @@ import { skipToken } from "@reduxjs/toolkit/query"
 import { useGetVariantByIdWithTasksQuery } from "../api/api"
 import { useLocation, useNavigate, useParams } from "react-router-dom"
 import { AddTaskDropdown } from "./AddTaskDropdown"
-
+import BackendError from "../../../shared/ui/BackendError"
 import { useEffect } from "react"
 import { useHandleSingleVariantMutations } from "../utils/handlers"
 import { useAppSelector } from "../../../shared/store"
@@ -12,7 +12,7 @@ import { selectVariantAnswers, selectAnswerToTask, addAnswerToTask } from "../mo
 import { SingleTask } from "./SingleTask"
 export const TaskList = () => {
     const { id } = useParams<{id: string}>()
-    const { data: variant, isSuccess: isGetVariantSuccess, isError: isGetVariantError } = useGetVariantByIdWithTasksQuery(id || skipToken)
+    const { data: variant, isSuccess: isGetVariantSuccess, error: getVariantError, isError: isGetVariantError } = useGetVariantByIdWithTasksQuery(id || skipToken)
     const navigate = useNavigate()
     const location = useLocation()
     const { task_id } = useParams()
@@ -67,15 +67,7 @@ export const TaskList = () => {
             </div>
             }
             
-            {isGetVariantError && <div className="flex justify-center items-center p-6">
-                    <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
-                        <strong className="font-bold">Ошибка!</strong>
-                        <span className="block sm:inline">
-                            {' '}
-                            Что-то пошло не так. Пожалуйста, попробуйте еще раз.
-                        </span>
-                    </div>
-                </div>}
+            {isGetVariantError && <BackendError error={getVariantError}/>}
             {isGetVariantSuccess &&
                 <div className="flex flex-col md:flex-row gap-4 py-4 h-[70%]">
                 {/* Left Section */}
