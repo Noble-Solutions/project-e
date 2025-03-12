@@ -7,14 +7,31 @@ services:
       context: ./frontend
       target: prod
     container_name: project_e_frontend_prod
-    ports:
-      - '80:3000'
+    volumes:
+      - frontend_dist:/app/dist
     env_file:
       - ./frontend/.env.production
     networks:
       - custom
-    
-  #админ панель нашего приложения
+
+  # Nginx
+  nginx:
+    image: nginx:latest
+    container_name: project_e_nginx_prod
+    ports:
+      - "8080:8080"
+      - "8443:8443"
+    volumes:
+      - ./nginx/server.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx/certs:/etc/nginx/certs
+      - ./frontend/dist:/var/www/project_e/dist
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - custom
+
+  # Админ панель
   admin_panel:
     build: ./adminka
     volumes:
@@ -58,6 +75,9 @@ services:
       - '5432:5432'
     networks:
       - custom
+
+volumes:
+  frontend_dist:
 
 networks:
   custom:
