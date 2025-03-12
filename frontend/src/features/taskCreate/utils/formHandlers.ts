@@ -51,6 +51,8 @@ export const useMainTaskFormHandleSubmit = () => {
                 if (variant_id) {
                     await addTaskToVariant({variant_id, task_id: data.task.id})
                     navigate(`../../variants/single/${variant_id}/main-widget`)
+                } else {
+                    navigate('../../tasks/list')
                 }
             })
             dispatch(resetForm())
