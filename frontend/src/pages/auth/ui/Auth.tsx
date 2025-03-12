@@ -9,7 +9,6 @@ import {
 import { SuccessAlert } from "../../../shared/ui/Alerts";
 import { extendedFormElements } from "../../../shared/types/extendedForm";
 import { useAppDispatсh, useAppSelector } from "../../../shared/store";
-import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 
 export const Auth = () => {
   const { authType } = useParams<{ authType: string }>();
@@ -197,11 +196,7 @@ export const Auth = () => {
                 <div className="mt-4">
                   <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
                     <strong className="font-bold">Ошибка!</strong>
-                    {authError.data && typeof authError.data === 'object' && 'message' in authError.data ? (
-                      <span className="block sm:inline"> {authError.data.message} </span>
-                    ) : (
                       <span className="block sm:inline"> Что-то пошло не так. Пожалуйста, попробуйте еще раз. </span>
-                    )}
                   </div>
                 </div>
               )}

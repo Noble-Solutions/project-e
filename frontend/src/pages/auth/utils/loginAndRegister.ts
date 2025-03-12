@@ -26,9 +26,6 @@ export const useHandleLoginAndRegister = () => {
         const { elements } = e.currentTarget
         const login = elements[0].value
         const password = elements[1].value
-        if (authType === 'register') {
-            
-        } 
         const form = e.currentTarget
         try {
             if (authType === 'login') {
