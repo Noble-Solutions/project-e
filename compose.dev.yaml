@@ -33,6 +33,14 @@ services:
     networks:
       - custom
 
+  support_bot:
+    build: ./bot
+    container_name: support_bot
+    volumes:
+      - ./bot:/app  # Монтируем текущую директорию в контейнер
+    networks:
+      - custom
+
   #основная апишка нашего приложения
   backend:
     build: 
