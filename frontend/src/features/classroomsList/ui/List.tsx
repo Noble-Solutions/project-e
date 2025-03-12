@@ -1,19 +1,17 @@
-import { Card } from "./Card";
-import { useGetAllClassroomsOfUserQuery } from "../api/api";
-import BackendError from "../../../shared/ui/BackendError";
-import { Link } from "react-router-dom";
-import { useAppSelector } from "../../../shared/store";
-import { selectCurrentUser } from "../../../entities/user/model/user.slice";
-
+import { Card } from "./Card"
+import { useGetAllClassroomsOfUserQuery } from "../api/api"
+import { Link } from "react-router-dom"
+import { useAppSelector } from "../../../shared/store"
+import { selectCurrentUser } from "../../../entities/user/model/user.slice"
 export const List = () => {
-  const {
-    data: classroomsData,
-    isSuccess: isClassroomsDataSuccess,
-    error: classroomsDataError,
-    isError: isClassroomsDataError,
-  } = useGetAllClassroomsOfUserQuery();
-  const user = useAppSelector(selectCurrentUser);
 
+  const { 
+    data: classroomsData, 
+    isSuccess: isClassroomsDataSuccess, 
+    // error: classroomsDataError,
+    isError: isClassroomsDataError 
+  } = useGetAllClassroomsOfUserQuery()
+  const user = useAppSelector(selectCurrentUser)
   return (
     <div className="container mx-auto px-4 py-8">
       {/* Container for responsiveness */}
@@ -48,12 +46,19 @@ export const List = () => {
                 }
               />
             ))}
-          {isClassroomsDataError && (
-            <BackendError error={classroomsDataError} />
-          )}
+      {isClassroomsDataError && 
+                <div className="flex justify-center items-center p-6">
+                    <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
+                        <strong className="font-bold">Ошибка!</strong>
+                        <span className="block sm:inline">
+                            {' '}
+                            Что-то пошло не так. Пожалуйста, попробуйте еще раз.
+                        </span>
+                    </div>
+                </div>
+            }
         </div>
       </div>
     </div>
-  );
-};
+  )}
 
