@@ -25,8 +25,7 @@ export const SingleTask = (task: TaskRead) => {
             }
             </>
             <div key={task.id} className="text-center">
-                <p>Текст задания: {task.text}</p>
-                <p>Тип задания: {task.type}</p>
+                <p className="text-2xl">{task.text}</p>
             </div>
         </>
     )
