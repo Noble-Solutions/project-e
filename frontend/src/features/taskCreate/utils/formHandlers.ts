@@ -1,6 +1,6 @@
 import { FormEvent } from "react";
 import { useCreateTaskMutation } from "../api/api";
-import { selectFileNameToGetPresignedUrlFor } from "../model/slice";
+import { selectFileNameToGetPresignedUrlFor, selectAdditionalFilenameToGetPresignedUrlFor } from "../model/slice";
 import { useAppDispatсh, useAppSelector } from "../../../shared/store";
 import { TaskCreate } from "../../../entities/task/types/types";
 import { resetForm } from "../../../entities/task/model/slice";
@@ -37,14 +37,17 @@ export const useMainTaskFormHandleSubmit = () => {
     const dispatch = useAppDispatсh()
 
     const fileNameToPassInGetPresignedUrlForUploadToS3Query = useAppSelector(selectFileNameToGetPresignedUrlFor)
+    const additionalFileNameToPassInGetPresignedUrlForUploadToS3Query = useAppSelector(selectAdditionalFilenameToGetPresignedUrlFor)
     const handleSubmit = async (formData: TaskCreate, variant_id?: string | null) => {
         try {
             console.log(variant_id)
             const file_extension = fileNameToPassInGetPresignedUrlForUploadToS3Query.split('.').pop()
+            const additional_file_extension = additionalFileNameToPassInGetPresignedUrlForUploadToS3Query.split('.').pop()
             await createTask(
                 {
                     task_create: formData, 
-                    file_extension
+                    file_extension,
+                    additional_file_extension
                 }
             ).unwrap().then(async (data) => {
                 console.log(data)

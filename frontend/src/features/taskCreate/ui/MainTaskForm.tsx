@@ -29,7 +29,10 @@ export const MainTaskForm = () => {
         <TaskFormFields />
       </form>
       <div className="w-full">
-        <S3SubmitForm />
+        <S3SubmitForm number_of_file={1}/>
+      </div>
+      <div className="w-full">
+        <S3SubmitForm number_of_file={2}/>
       </div>
       <div className="w-full flex justify-center">
         <button

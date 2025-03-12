@@ -38,6 +38,8 @@ class TaskRead(BaseModel):
     correct_answer: Optional[str]
     file_id: Optional[UUID]
     file_extension: Optional[str]
+    additional_file_id: Optional[UUID]
+    additional_file_extension: Optional[str]
     teacher_id: UUID
 
 

@@ -109,23 +109,33 @@ async def create_task(
         Depends(get_s3_service(service_class=S3BaseService)),
     ],
     file_extension: Optional[str] = Body(default=None),
+    additional_file_extension: Optional[str] = Body(default=None),
 ):
     task = await task_service.create_task(
         task_create=task_create,
         teacher_id=teacher.id,
         file_extension=file_extension,
+        additional_file_extension=additional_file_extension,
     )
-    print(task)
+    repsponse = {
+        "task": task,
+    }
     if task.file_id:
         presigned_url_data_object = await s3_service.get_presigned_url_for_upload_to_s3(
             full_file_name=f"{task.file_id}.{file_extension}"
         )
-        return {
-            "task": task,
-            "presigned_url_data_object": presigned_url_data_object,
-        }
+        repsponse["presigned_url_data_object"] = presigned_url_data_object
+    if task.additional_file_id:
+        additional_presigned_url_data_object = (
+            await s3_service.get_presigned_url_for_upload_to_s3(
+                full_file_name=f"{task.additional_file_id}.{additional_file_extension}"
+            )
+        )
+        repsponse["additional_presigned_url_data_object"] = (
+            additional_presigned_url_data_object
+        )
 
-    return {"task": task}
+    return repsponse
 
 
 @router.get(

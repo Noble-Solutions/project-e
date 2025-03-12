@@ -7,7 +7,7 @@ import { extendedFormElements } from '../../../shared/types/extendedForm';
 
 export const CRUDForm = () => {
   const navigate = useNavigate();
-  const { handleCreateVariant, isCreateVariantSuccess, isLoading } = useHandleCreateVariant(); // Assuming isLoading is available
+  const { handleCreateVariant, isCreateVariantSuccess, isLoadingVariant } = useHandleCreateVariant(); // Assuming isLoading is available
 
   const [formData, setFormData] = useState({
     name: '', // Initialize with empty values
@@ -23,7 +23,7 @@ export const CRUDForm = () => {
 
     const handleSubmit = (e: FormEvent<extendedFormElements>) => {
         e.preventDefault();
-        handleCreateVariant(e, formData)
+        handleCreateVariant(e)
     }
 
   return (
@@ -64,10 +64,10 @@ export const CRUDForm = () => {
                 </div>
                 <button
                   type="submit"
-                  disabled={isLoading}
+                  disabled={isLoadingVariant}
                   className="w-full text-white bg-blue-600 hover:bg-blue-700 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 px-5 py-2.5 text-center disabled:bg-blue-400"
                 >
-                  {isLoading ? 'Создание...' : 'Создать вариант'}
+                  {isLoadingVariant ? 'Создание...' : 'Создать вариант'}
                 </button>
               </form>
             </div>

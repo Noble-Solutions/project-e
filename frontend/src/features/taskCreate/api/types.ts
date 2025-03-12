@@ -12,11 +12,16 @@ type s3SubmitFormProps = {
 export type taskCreateQueryBody = {
     task_create: TaskCreate,
     file_extension?: string
+    additional_file_extension?: string
 }
 
 export type taskCreateQueryResponse = {
     task: TaskRead,
-    presigned_url_data_object: {
+    presigned_url_data_object?: {
+        url: string,
+        fields: s3SubmitFormProps
+    },
+    additional_presigned_url_data_object?: {
         url: string,
         fields: s3SubmitFormProps
     }
