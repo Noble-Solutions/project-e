@@ -28,7 +28,7 @@ const classroomsApi = baseApi.injectEndpoints({
         }),
         deleteVariant: build.mutation<void, {variant_id: string}>({
             query: ({variant_id}) => ({
-                url: `variants/${variant_id}`,
+                url: `variants/${variant_id}/`,
                 method: 'DELETE',
             }),
             invalidatesTags: ['Variants']
