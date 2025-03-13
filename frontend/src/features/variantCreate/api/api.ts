@@ -5,7 +5,7 @@ const variantsApi = baseApi.injectEndpoints({
     endpoints: (build) => ({
         createVariant: build.mutation<classroomRead, {name: string}>({
             query: (variant) => ({
-                url: '/variants',
+                url: '/variants/',
                 method: 'POST',
                 body: variant
             }),
